@@ -24,17 +24,17 @@ const ServicesPage: FC = () => {
     <div className="w-full space-y-10">
       <h1 className="text-6xl">Services</h1>
       <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
-      <table className="w-full max-w-7xl table-auto text-left shadow-md">
-        <thead className="bg-slate-100 text-sm">
-          <th className="py-3 pl-5 font-medium">Name</th>
+      <table className="w-full max-w-7xl table-auto border-collapse text-left shadow-md">
+        <thead className="rounded-tl rounded-tr bg-slate-200 text-sm">
+          <th className="rounded-tl py-3 pl-5 font-medium">Name</th>
           <th className="py-3 pr-5 font-medium">Thing ID</th>
-          <th className="py-3 pr-5 font-medium">Keywords</th>
+          <th className="rounded-tr py-3 pr-5 font-medium">Keywords</th>
           {/* <th className="py-3 pr-5 font-medium"></th> */}
         </thead>
-        <tbody className="bg-slate-50 text-xs text-slate-600">
+        <tbody className="bg-slate-100 text-xs text-slate-600">
           {filteredServices &&
             filteredServices.map((service) => (
-              <tr className="hover:bg-slate-100">
+              <tr className="font-light transition-colors hover:bg-slate-200">
                 <td className="py-3 pl-5">{service.name}</td>
                 <td className="py-3 pr-5">{service.thingID}</td>
                 <td className="py-3 pr-5">{service.keywords}</td>
