@@ -11,7 +11,7 @@ import NavSidebar from "./components/NavSidebar";
 
 const App: React.FC = () => {
   return (
-    <div className="flex divide-x">
+    <div className="flex divide-x-2">
       <NavSidebar />
       <div className="h-screen px-10 py-20">
         <Routes>

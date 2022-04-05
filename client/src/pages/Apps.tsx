@@ -2,8 +2,8 @@ import React, { FC } from "react";
 
 const AppsPage: FC = () => {
   return (
-    <div>
-      <h1>Apps</h1>
+    <div className="mt-20">
+      <h1 className="text-6xl">Apps</h1>
     </div>
   );
 };
