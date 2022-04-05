@@ -14,7 +14,7 @@ const NavPill: FC<Props> = ({ text, to }) => {
     <Link
       className={`flex w-fit items-center space-x-5 rounded-full text-sm uppercase ${
         match ? "bg-slate-900" : "bg-slate-100"
-      } px-4 py-2 ${
+      } px-5 py-3 ${
         match ? "text-slate-50" : "text-slate-900"
       } transition-colors ${match ? "" : "hover:bg-slate-200"}`}
       to={to}

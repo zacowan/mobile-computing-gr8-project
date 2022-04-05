@@ -14,7 +14,7 @@ const SearchBar: FC<Props> = ({ onChange }) => {
     <input
       type="text"
       placeholder="Search..."
-      className="w-full max-w-md rounded border-slate-600 text-slate-600"
+      className="w-full max-w-md rounded border-slate-600 px-5 py-3 text-slate-600"
       onChange={handleChange}
     />
   );

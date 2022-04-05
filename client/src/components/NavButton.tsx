@@ -15,7 +15,7 @@ const NavButton: FC<Props> = ({ icon, text, to }) => {
     <Link
       className={`flex items-center space-x-5 rounded ${
         match ? "bg-slate-900" : "bg-slate-100"
-      } px-4 py-2 pr-20 ${
+      } px-5 py-3 pr-20 ${
         match ? "text-slate-50" : "text-slate-900"
       } transition-colors ${match ? "" : "hover:bg-slate-200"}`}
       to={to}
