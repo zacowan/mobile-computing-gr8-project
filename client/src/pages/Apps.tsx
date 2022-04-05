@@ -40,7 +40,17 @@ const AppsPage: FC = () => {
       {/* Apps */}
       <div className="grid max-w-4xl grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
         {filteredApps &&
-          filteredApps.map((app, index) => <AppCard app={app} key={index} />)}
+          filteredApps.map((app, index) => (
+            <AppCard
+              onClickDelete={async () => {}}
+              onClickEdit={async () => {}}
+              onClickLogs={async () => {}}
+              onClickStart={async () => {}}
+              onClickStop={async () => {}}
+              app={app}
+              key={index}
+            />
+          ))}
       </div>
     </div>
   );

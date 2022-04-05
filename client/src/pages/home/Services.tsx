@@ -26,10 +26,12 @@ const ServicesPage: FC = () => {
       <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
       <table className="w-full max-w-7xl table-auto border-collapse text-left shadow-md">
         <thead className="rounded-tl rounded-tr bg-slate-200 text-sm">
-          <th className="rounded-tl py-3 pl-5 font-medium">Name</th>
-          <th className="py-3 pr-5 font-medium">Thing ID</th>
-          <th className="rounded-tr py-3 pr-5 font-medium">Keywords</th>
-          {/* <th className="py-3 pr-5 font-medium"></th> */}
+          <tr>
+            <th className="rounded-tl py-3 pl-5 font-medium">Name</th>
+            <th className="py-3 pr-5 font-medium">Thing ID</th>
+            <th className="rounded-tr py-3 pr-5 font-medium">Keywords</th>
+            {/* <th className="py-3 pr-5 font-medium"></th> */}
+          </tr>
         </thead>
         <tbody className="bg-slate-100 text-xs text-slate-600">
           {filteredServices &&

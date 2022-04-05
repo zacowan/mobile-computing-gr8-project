@@ -8,14 +8,16 @@ import {
   StopIcon,
   TrashIcon,
 } from "../assets/icons";
+import ConfirmDialog from "./ConfirmDialog";
+import Modal, { useModal } from "../components/Modal";
 
 type Props = {
   app: App;
-  onClickStart?: () => Promise<void>;
-  onClickStop?: () => Promise<void>;
-  onClickLogs?: () => Promise<void>;
-  onClickEdit?: () => Promise<void>;
-  onClickDelete?: () => Promise<void>;
+  onClickStart: () => Promise<void>;
+  onClickStop: () => Promise<void>;
+  onClickLogs: () => Promise<void>;
+  onClickEdit: () => Promise<void>;
+  onClickDelete: () => Promise<void>;
 };
 
 const AppCard: FC<Props> = ({
@@ -26,7 +28,8 @@ const AppCard: FC<Props> = ({
   onClickEdit,
   onClickDelete,
 }) => {
-  const [startStopDisabled, setStartStopDisabled] = useState<boolean>();
+  const [startStopDisabled, setStartStopDisabled] = useState<boolean>(false);
+  const [modalActive, setModalActive] = useModal();
 
   const handleClickStartStop = async (
     callback: (() => Promise<void>) | undefined
@@ -38,8 +41,22 @@ const AppCard: FC<Props> = ({
     }
   };
 
+  const handleDelete = async () => {
+    await onClickDelete();
+    setModalActive(false);
+  };
+
   return (
     <div className="space-y-2 rounded bg-slate-100 p-5 shadow-md transition-colors">
+      {/* Confirm Dialog Modal */}
+      <Modal active={modalActive}>
+        <ConfirmDialog
+          title={`Delete ${app.name}`}
+          description="Are you sure you want to delete this app?"
+          onConfirm={handleDelete}
+          onCancel={() => setModalActive(false)}
+        />
+      </Modal>
       {/* Info */}
       <h1 className="text-xl">{app.name}</h1>
       <h2 className="text-xs font-light text-slate-600">
@@ -83,7 +100,7 @@ const AppCard: FC<Props> = ({
             </button>
             {/* Delete */}
             <button
-              onClick={onClickDelete}
+              onClick={() => setModalActive(true)}
               className="text-slate-600 hover:text-slate-700"
             >
               <TrashIcon />
