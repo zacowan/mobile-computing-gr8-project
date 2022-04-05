@@ -8,7 +8,7 @@ const NavSidebar: FC = () => {
       {/* Title */}
       <div className="text-center">
         <h1 className="text-lg font-medium">Atlas IoT IDE</h1>
-        <h2 className="text-xs text-slate-600">GR8</h2>
+        <h2 className="text-xs font-light text-slate-600">GR8</h2>
       </div>
       {/* Navigation */}
       <nav className="py-20">
@@ -71,6 +71,12 @@ const NavSidebar: FC = () => {
           </li>
         </ul>
       </nav>
+      {/* Version */}
+      {process.env.REACT_APP_VERSION && (
+        <div className="px-5 py-3 text-center text-xs font-light text-slate-600">
+          Version {process.env.REACT_APP_VERSION}
+        </div>
+      )}
     </div>
   );
 };

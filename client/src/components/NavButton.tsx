@@ -13,7 +13,7 @@ const NavButton: FC<Props> = ({ icon, text, to }) => {
 
   return (
     <Link
-      className={`flex items-center space-x-5 rounded ${
+      className={`flex items-center space-x-5 rounded font-light ${
         match ? "bg-slate-900" : "bg-slate-100"
       } px-5 py-3 pr-20 ${
         match ? "text-slate-50" : "text-slate-900"
