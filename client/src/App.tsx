@@ -10,6 +10,7 @@ import NavSidebar from "./components/NavSidebar";
 // Data
 import DataContext from "./DataContext";
 import MockThings from "./mock/things";
+import MockServices from "./mock/services";
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const App: React.FC = () => {
       <DataContext.Provider
         value={{
           things: MockThings,
+          services: MockServices,
         }}
       >
         <div className="h-screen w-full px-10 py-20">

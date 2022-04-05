@@ -2,7 +2,7 @@
  *
  * @param term the search term
  * @param data the data to search on
- * @param keys the keys of the data that can be searched
+ * @param keys the keys of the data that can be searched. The result of each key on the data must be a string.
  * @returns the filtered data
  */
 export const getSearchResults = (
