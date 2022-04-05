@@ -26,7 +26,7 @@ const NavSidebar: FC = () => {
                 </svg>
               }
               text={"Home"}
-              to="/home"
+              to="home"
             />
           </li>
           <li>
@@ -46,7 +46,7 @@ const NavSidebar: FC = () => {
                 </svg>
               }
               text={"Apps"}
-              to="/apps"
+              to="apps"
             />
           </li>
           <li>
@@ -66,7 +66,7 @@ const NavSidebar: FC = () => {
                 </svg>
               }
               text={"Settings"}
-              to="/settings"
+              to="settings"
             />
           </li>
         </ul>

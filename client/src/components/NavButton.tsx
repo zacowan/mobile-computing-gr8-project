@@ -9,7 +9,7 @@ type Props = {
 
 const NavButton: FC<Props> = ({ icon, text, to }) => {
   const resolved = useResolvedPath(to);
-  const match = useMatch({ path: resolved.pathname, end: true });
+  const match = useMatch({ path: resolved.pathname, end: false });
 
   return (
     <Link
