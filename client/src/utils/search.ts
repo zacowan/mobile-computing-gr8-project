@@ -11,6 +11,8 @@ export const getSearchResults = (
   keys: Array<string>
 ) => {
   if (!term) return data;
+  if (data.length === 0) return data;
+  if (keys.length === 0) return data;
 
   const filtered: Array<any> = [];
   const terms = term.toLowerCase().trim().split(" ");
@@ -22,11 +24,15 @@ export const getSearchResults = (
       itemTerm = itemTerm.concat(item[key].toLowerCase().trim());
     });
     // Filter out non-matches
+    let numMatches = 0;
     terms.forEach((term) => {
       if (itemTerm.lastIndexOf(term) !== -1) {
-        filtered.push(item);
+        numMatches += 1;
       }
     });
+    if (numMatches === terms.length) {
+      filtered.push(item);
+    }
   });
 
   return filtered;
