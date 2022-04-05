@@ -52,26 +52,30 @@ const AppCard: FC<Props> = ({
           </button>
         )}
         {/* Logs */}
-        <button
-          onClick={onClickLogs}
-          className="text-slate-600 hover:text-slate-700"
-        >
-          <ReportIcon />
-        </button>
-        {/* Edit */}
-        <button
-          onClick={onClickEdit}
-          className="text-slate-600 hover:text-slate-700"
-        >
-          <PencilIcon />
-        </button>
-        {/* Delete */}
-        <button
-          onClick={onClickDelete}
-          className="text-slate-600 hover:text-slate-700"
-        >
-          <TrashIcon />
-        </button>
+        {!app.active && (
+          <>
+            <button
+              onClick={onClickLogs}
+              className="text-slate-600 hover:text-slate-700"
+            >
+              <ReportIcon />
+            </button>
+            {/* Edit */}
+            <button
+              onClick={onClickEdit}
+              className="text-slate-600 hover:text-slate-700"
+            >
+              <PencilIcon />
+            </button>
+            {/* Delete */}
+            <button
+              onClick={onClickDelete}
+              className="text-slate-600 hover:text-slate-700"
+            >
+              <TrashIcon />
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

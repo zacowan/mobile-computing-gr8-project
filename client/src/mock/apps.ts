@@ -7,10 +7,67 @@ const MockApps: Array<App> = [
     id: "1241252512asdfasdfas",
     active: false,
     lastActive: Date.now().toString(),
+    continuous: false,
     components: [
       {
         relationship: undefined,
-        services: MockServices.slice(1),
+        services: [
+          {
+            name: "toggle_led",
+            thingID: "thing_01",
+            input: "1",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Turn LED On When Dark",
+    id: "asdfgh",
+    active: true,
+    lastActive: Date.now().toString(),
+    continuous: true,
+    components: [
+      {
+        relationship: "Control",
+        services: [
+          {
+            name: "get_light",
+            thingID: "thing_02",
+            operator: ">=",
+            outputCompare: "50",
+          },
+          {
+            name: "toggle_led",
+            thingID: "thing_01",
+            input: "1",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Turn LED Off When Light",
+    id: "asdfgh",
+    active: false,
+    lastActive: Date.now().toString(),
+    continuous: true,
+    components: [
+      {
+        relationship: "Control",
+        services: [
+          {
+            name: "get_light",
+            thingID: "thing_02",
+            operator: "<",
+            outputCompare: "50",
+          },
+          {
+            name: "toggle_led",
+            thingID: "thing_01",
+            input: "0",
+          },
+        ],
       },
     ],
   },

@@ -5,7 +5,7 @@ export type Service = {
   type: string;
   inputs: Array<{
     name: string;
-    type: string; // basically always int
+    type: string; // basically always "int"
   }>;
   output: string; // NULL or int
   category: string;
