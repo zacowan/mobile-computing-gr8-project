@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 
 import type { App } from "../types/app";
 import {
@@ -11,11 +11,11 @@ import {
 
 type Props = {
   app: App;
-  onClickStart?: () => void;
-  onClickStop?: () => void;
-  onClickLogs?: () => void;
-  onClickEdit?: () => void;
-  onClickDelete?: () => void;
+  onClickStart?: () => Promise<void>;
+  onClickStop?: () => Promise<void>;
+  onClickLogs?: () => Promise<void>;
+  onClickEdit?: () => Promise<void>;
+  onClickDelete?: () => Promise<void>;
 };
 
 const AppCard: FC<Props> = ({
@@ -26,6 +26,18 @@ const AppCard: FC<Props> = ({
   onClickEdit,
   onClickDelete,
 }) => {
+  const [startStopDisabled, setStartStopDisabled] = useState<boolean>();
+
+  const handleClickStartStop = async (
+    callback: (() => Promise<void>) | undefined
+  ) => {
+    if (callback) {
+      setStartStopDisabled(true);
+      await callback();
+      setStartStopDisabled(false);
+    }
+  };
+
   return (
     <div className="space-y-2 rounded bg-slate-100 p-5 shadow-md transition-colors">
       {/* Info */}
@@ -38,15 +50,17 @@ const AppCard: FC<Props> = ({
         {/* Start/stop */}
         {app.active ? (
           <button
-            onClick={onClickStart}
-            className="text-red-600 transition-colors hover:text-red-700"
+            onClick={() => handleClickStartStop(onClickStop)}
+            className="text-red-600 transition-colors hover:text-red-700 disabled:text-red-700 disabled:hover:cursor-not-allowed"
+            disabled={startStopDisabled}
           >
             <StopIcon className="h-12 w-12" />
           </button>
         ) : (
           <button
-            onClick={onClickStop}
-            className="text-blue-600 transition-colors hover:text-blue-700"
+            onClick={() => handleClickStartStop(onClickStart)}
+            className="text-blue-600 transition-colors hover:text-blue-700 disabled:text-blue-700 disabled:hover:cursor-not-allowed"
+            disabled={startStopDisabled}
           >
             <PlayIcon className="h-12 w-12" />
           </button>
