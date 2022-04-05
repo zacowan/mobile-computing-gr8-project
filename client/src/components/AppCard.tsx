@@ -10,6 +10,7 @@ import {
 } from "../assets/icons";
 import ConfirmDialog from "./ConfirmDialog";
 import Modal, { useModal } from "../components/Modal";
+import dayjs from "dayjs";
 
 type Props = {
   app: App;
@@ -46,6 +47,8 @@ const AppCard: FC<Props> = ({
     setModalActive(false);
   };
 
+  console.log(new Date(Number(app.lastActive)));
+
   return (
     <div className="space-y-2 rounded bg-slate-100 p-5 shadow-md transition-colors">
       {/* Confirm Dialog Modal */}
@@ -60,7 +63,9 @@ const AppCard: FC<Props> = ({
       {/* Info */}
       <h1 className="text-xl">{app.name}</h1>
       <h2 className="text-xs font-light text-slate-600">
-        {app.active ? "Active now" : `Last active: ${app.lastActive}`}
+        {app.active
+          ? "Active now"
+          : `Last active: ${dayjs(new Date(Number(app.lastActive))).fromNow()}`}
       </h2>
       {/* Buttons */}
       <div className="flex items-center space-x-3 pt-2">
