@@ -33,8 +33,11 @@ const ServicesPage: FC = () => {
         </thead>
         <tbody className="bg-slate-100 text-xs text-slate-600">
           {filteredServices &&
-            filteredServices.map((service) => (
-              <tr className="font-light transition-colors hover:bg-slate-200">
+            filteredServices.map((service, index) => (
+              <tr
+                className="font-light transition-colors hover:bg-slate-200"
+                key={index}
+              >
                 <td className="py-3 pl-5">{service.name}</td>
                 <td className="py-3 pr-5">{service.thingID}</td>
                 <td className="py-3 pr-5">{service.keywords}</td>

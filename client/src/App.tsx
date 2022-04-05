@@ -6,6 +6,7 @@ import ThingsPage from "./pages/home/Things";
 import ServicesPage from "./pages/home/Services";
 import AppsPage from "./pages/Apps";
 import SettingsPage from "./pages/Settings";
+import AppEditorPage from "./pages/AppEditor";
 import NavSidebar from "./components/NavSidebar";
 // Data
 import DataContext from "./DataContext";
@@ -31,6 +32,7 @@ const App: React.FC = () => {
               <Route path="services" element={<ServicesPage />} />
             </Route>
             <Route path="apps" element={<AppsPage />} />
+            <Route path="apps/recipe" element={<AppEditorPage />} />
             <Route path="settings" element={<SettingsPage />} />
             <Route path="*" element={<h1>No match</h1>} />
           </Routes>
