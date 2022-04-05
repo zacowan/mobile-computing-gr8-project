@@ -1,41 +1,46 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import type { App } from "../types/app";
+import DataContext from "../DataContext";
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
+import { getSearchResults } from "../utils/search";
+import AppCard from "../components/AppCard";
+import { PlusIcon } from "../assets/icons";
 
 const AppsPage: FC = () => {
+  const { apps } = useContext(DataContext);
   const [searchTerm, setSearchTerm] = useState<string>();
+  const [filteredApps, setFilteredApps] = useState<Array<App>>();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const filtered = getSearchResults(searchTerm, apps, ["name"]);
+    setFilteredApps(filtered);
+  }, [apps, searchTerm]);
 
   return (
     <div className="mt-20 w-full space-y-10">
       <h1 className="text-6xl">Apps</h1>
+      {/* Controls */}
       <div className="flex flex-col space-y-5">
         <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
         <div className="flex space-x-5">
           <Button
             primary
             onClick={() => navigate("recipe")}
-            icon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            }
+            icon={<PlusIcon />}
           >
             Create Recipe
           </Button>
           <Button>Upload Recipe</Button>
         </div>
+      </div>
+      {/* Apps */}
+      <div className="grid max-w-4xl grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {filteredApps &&
+          filteredApps.map((app, index) => <AppCard app={app} key={index} />)}
       </div>
     </div>
   );
