@@ -1,10 +1,12 @@
 import React, { FC, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
 
 const AppsPage: FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>();
+  const navigate = useNavigate();
 
   return (
     <div className="mt-20 w-full space-y-10">
@@ -14,8 +16,7 @@ const AppsPage: FC = () => {
         <div className="flex space-x-5">
           <Button
             primary
-            onClick={() => {}}
-            label="Create Recipe"
+            onClick={() => navigate("recipe")}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -30,8 +31,10 @@ const AppsPage: FC = () => {
                 />
               </svg>
             }
-          />
-          <Button onClick={() => {}} label="Upload Recipe" />
+          >
+            Create Recipe
+          </Button>
+          <Button>Upload Recipe</Button>
         </div>
       </div>
     </div>

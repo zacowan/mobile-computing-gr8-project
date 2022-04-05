@@ -24,9 +24,11 @@ const ThingsPage: FC = () => {
     <div className="w-full space-y-10">
       <h1 className="text-6xl">Things</h1>
       <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
-      <div className="grid max-w-7xl grid-cols-3 gap-5">
+      <div className="grid max-w-4xl grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
         {filteredThings &&
-          filteredThings.map((thing) => <ThingCard thing={thing} />)}
+          filteredThings.map((thing, index) => (
+            <ThingCard key={index} thing={thing} />
+          ))}
       </div>
     </div>
   );

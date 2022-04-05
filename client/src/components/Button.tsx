@@ -1,13 +1,16 @@
 import React, { FC } from "react";
 
 type Props = {
-  label: string;
-  onClick: () => void;
   primary?: boolean;
   icon?: React.ReactNode;
 };
 
-const Button: FC<Props> = ({ label, onClick, primary, icon }) => {
+const Button: FC<Props & React.ComponentProps<"button">> = ({
+  primary,
+  icon,
+  children,
+  ...props
+}) => {
   return (
     <button
       className={`w-fit rounded ${
@@ -17,10 +20,10 @@ const Button: FC<Props> = ({ label, onClick, primary, icon }) => {
       } ${
         primary ? "text-slate-50" : "text-slate-900"
       } flex items-center space-x-2 font-light`}
-      onClick={onClick}
+      {...props}
     >
       {icon && <span>{icon}</span>}
-      <span>{label}</span>
+      <span>{children}</span>
     </button>
   );
 };
