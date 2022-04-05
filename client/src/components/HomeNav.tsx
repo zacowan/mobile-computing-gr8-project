@@ -12,9 +12,6 @@ const HomeNav: FC = () => {
         <li>
           <NavPill to="services" text="Services" />
         </li>
-        <li>
-          <NavPill to="relationships" text="Relationships" />
-        </li>
       </ul>
     </nav>
   );
