@@ -1,18 +1,16 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
 
 const AppsPage: FC = () => {
-  const handleSearch = (value: string) => {
-    console.log(value);
-  };
+  const [searchTerm, setSearchTerm] = useState<string>();
 
   return (
     <div className="mt-20 w-full space-y-10">
       <h1 className="text-6xl">Apps</h1>
       <div className="flex flex-col space-y-5">
-        <SearchBar onChange={handleSearch} />
+        <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
         <div className="flex space-x-5">
           <Button
             primary

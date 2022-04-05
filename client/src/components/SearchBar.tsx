@@ -1,13 +1,14 @@
 import React, { FC } from "react";
 
 type Props = {
+  value?: string;
   onChange: (value: string) => void;
 };
 
-const SearchBar: FC<Props> = ({ onChange }) => {
+const SearchBar: FC<Props> = ({ onChange, value }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    onChange(value);
+    const val = e.target.value;
+    onChange(val);
   };
 
   return (
@@ -16,6 +17,7 @@ const SearchBar: FC<Props> = ({ onChange }) => {
       placeholder="Search..."
       className="w-full max-w-md rounded border-slate-600 px-5 py-3 text-slate-600"
       onChange={handleChange}
+      value={value}
     />
   );
 };
