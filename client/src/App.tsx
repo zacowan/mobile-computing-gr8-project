@@ -34,7 +34,7 @@ const App: React.FC = () => {
               <Route path="services" element={<ServicesPage />} />
             </Route>
             <Route path="apps" element={<AppsPage />} />
-            <Route path="apps/recipe" element={<AppEditorPage />} />
+            <Route path="apps/editor" element={<AppEditorPage />} />
             <Route path="settings" element={<SettingsPage />} />
             <Route path="*" element={<h1>No match</h1>} />
           </Routes>

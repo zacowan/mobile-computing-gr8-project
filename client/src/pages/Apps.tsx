@@ -29,12 +29,12 @@ const AppsPage: FC = () => {
         <div className="flex space-x-5">
           <Button
             primary
-            onClick={() => navigate("recipe")}
+            onClick={() => navigate("editor")}
             icon={<PlusIcon />}
           >
-            Create Recipe
+            Create App
           </Button>
-          <Button>Upload Recipe</Button>
+          <Button>Upload App</Button>
         </div>
       </div>
       {/* Apps */}
