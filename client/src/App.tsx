@@ -12,6 +12,7 @@ import NavSidebar from "./components/NavSidebar";
 import DataContext from "./DataContext";
 import MockThings from "./mock/things";
 import MockServices from "./mock/services";
+import MockApps from "./mock/apps";
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
         value={{
           things: MockThings,
           services: MockServices,
+          apps: MockApps,
         }}
       >
         <div className="h-screen w-full px-10 py-20">
@@ -32,7 +34,7 @@ const App: React.FC = () => {
               <Route path="services" element={<ServicesPage />} />
             </Route>
             <Route path="apps" element={<AppsPage />} />
-            <Route path="apps/recipe" element={<AppEditorPage />} />
+            <Route path="apps/editor" element={<AppEditorPage />} />
             <Route path="settings" element={<SettingsPage />} />
             <Route path="*" element={<h1>No match</h1>} />
           </Routes>

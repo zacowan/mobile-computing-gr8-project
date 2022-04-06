@@ -13,7 +13,7 @@ const AppEditorPage: FC = () => {
 
   return (
     <div className="mt-20 w-full space-y-10">
-      <h1 className="text-6xl">New Recipe</h1>
+      <h1 className="text-6xl">New App</h1>
       <form className="space-y-10" onSubmit={handleSubmit}>
         <input
           type="text"
