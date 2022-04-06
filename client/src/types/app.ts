@@ -1,0 +1,22 @@
+export type App = {
+  name: string;
+  id: string;
+  active: boolean;
+  lastActive: string; // timestamp
+  continuous: boolean;
+  loopDelay?: number; // time to wait between loop calls, in ms
+  components: Array<AppComponent>;
+};
+
+export type AppComponent = {
+  relationship?: string; // can be a relationship, or not
+  services: Array<AppService>; // can be 1 service, or 2 services in the context of a relationship
+};
+
+export type AppService = {
+  name: string;
+  thingID: string;
+  input?: string;
+  operator?: string; // used for if-then relationship
+  outputCompare?: string; // used for if-then relationship; if $output $operator $outputCompare is true, then run the next service
+};

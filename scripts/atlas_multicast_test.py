@@ -7,7 +7,16 @@ MULTICAST_PORT = 1235
 
 
 def main():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+
+    try:
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    except AttributeError:
+        pass
+        
+    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 32) 
+    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
+
     sock.bind((MULTICAST_ADDRESS, MULTICAST_PORT))
 
     group = socket.inet_aton(MULTICAST_ADDRESS)
