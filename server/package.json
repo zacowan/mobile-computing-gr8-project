@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "set PORT=3001 && concurrently 'npm:server' 'npm:discover'",
+    "start": "concurrently 'npm:server' 'npm:discover'",
     "server": "node ./bin/www",
     "discover": "node ./discover/discover.js"
   },
