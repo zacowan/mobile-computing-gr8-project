@@ -24,12 +24,12 @@ client.on("listening", function () {
 });
 
 client.on("message", function (message, remote) {
-  // console.log("A: Epic Command Received. Preparing Relay.");
-  // console.log(
-  //   "B: From: " + remote.address + ":" + remote.port + " - " + message
-  // );
   
   const decodedMessage = JSON.parse(message.toString());
+
+  // Ignore Identity_Entity tweets for simplicity
+  if (decodedMessage['Tweet Type'] == 'Identity_Entity') return;
+
   let isNewTweet = true;
    
   // Check if new message

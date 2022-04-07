@@ -3,9 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "set PORT=3001 && node ./bin/www"
+    "start": "set PORT=3001 && concurrently 'npm:server' 'npm:discover'",
+    "server": "node ./bin/www",
+    "discover": "node ./discover/discover.js"
   },
   "dependencies": {
+    "concurrently": "^7.1.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dgram": "^1.0.1",
