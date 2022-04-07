@@ -106,6 +106,7 @@ router.get('/discover', function(req, res, next) {
         let thing_tweet = thing_tweets.find((tweet) => { return tweet["Tweet Type"] == "Identity_Thing" });
 
         let thing = {
+          smartSpaceID: thing_tweet["Space ID"],
           name: thing_tweet["Name"],
           description: thing_tweet["Description"],
           id: thing_id,
