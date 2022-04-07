@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useQuery } from "react-query";
 // Components & Pages
 import HomePage from "./pages/home";
 import ThingsPage from "./pages/home/Things";
@@ -13,13 +14,16 @@ import DataContext from "./DataContext";
 import MockThings from "./mock/things";
 import MockServices from "./mock/services";
 import MockApps from "./mock/apps";
+import fetchDiscover from "./utils/apiCalls/fetchDiscover";
 
 const DATA_FETCH_RATE_MS = 5000; // 5 seconds
 
 const App: React.FC = () => {
+  const discoverData = useQuery("discover", fetchDiscover);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("I'm inside of setInterval()");
+      discoverData.refetch();
     }, DATA_FETCH_RATE_MS);
     return () => clearInterval(interval);
   }, []);
@@ -29,8 +33,8 @@ const App: React.FC = () => {
       <NavSidebar />
       <DataContext.Provider
         value={{
-          things: MockThings,
-          services: MockServices,
+          things: discoverData.data.things,
+          services: discoverData.data.services,
           apps: MockApps,
         }}
       >
