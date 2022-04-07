@@ -50,7 +50,7 @@ const AppCard: FC<Props> = ({
   console.log(new Date(Number(app.lastActive)));
 
   return (
-    <div className="space-y-2 rounded bg-slate-100 p-5 shadow-md transition-colors">
+    <div className="space-y-2 rounded border border-slate-200 p-5 shadow-md transition-colors hover:bg-slate-100">
       {/* Confirm Dialog Modal */}
       <Modal active={modalActive}>
         <ConfirmDialog
@@ -61,8 +61,8 @@ const AppCard: FC<Props> = ({
         />
       </Modal>
       {/* Info */}
-      <h1 className="text-xl">{app.name}</h1>
-      <h2 className="text-xs font-light text-slate-600">
+      <h1 className="text-xl font-medium tracking-tight">{app.name}</h1>
+      <h2 className="text-sm font-light text-slate-600">
         {app.active
           ? "Active now"
           : `Last active: ${dayjs(new Date(Number(app.lastActive))).fromNow()}`}
