@@ -1,8 +1,17 @@
 var PORT = 1235;
 var dgram = require("dgram");
 var client = dgram.createSocket("udp4");
+var redis = require('redis');
 
 let tweets = []
+
+connectToRedis = async() =>{
+    await redisClient.connect();
+}
+
+tweetsToRedis = async(tweets) => {
+    await redisClient.set('tweets', JSON.stringify(tweets));
+}
 
 client.on("listening", function () {
   var address = client.address();
@@ -15,12 +24,12 @@ client.on("listening", function () {
 });
 
 client.on("message", function (message, remote) {
-  // console.log("A: Epic Command Received. Preparing Relay.");
-  // console.log(
-  //   "B: From: " + remote.address + ":" + remote.port + " - " + message
-  // );
   
   const decodedMessage = JSON.parse(message.toString());
+
+  // Ignore Identity_Entity tweets for simplicity
+  if (decodedMessage['Tweet Type'] == 'Identity_Entity') return;
+
   let isNewTweet = true;
    
   // Check if new message
@@ -41,14 +50,20 @@ client.on("message", function (message, remote) {
   // Add tweet if not new
   if (isNewTweet) {
     decodedMessage['lastSeen'] = Date.now();
-    tweets = [...tweets, decodedMessage]
+    tweets = [...tweets, decodedMessage];
   }else{
     
   }
 
-  console.log(tweets)
-  console.log(tweets.length)
+  console.log(tweets);
+  console.log(tweets.length);
+  tweetsToRedis(tweets);
   
 });
+
+
+const redisClient = redis.createClient();
+redisClient.on('error', (err) => console.log('Redis Client Error', err));
+connectToRedis()
 
 client.bind(PORT);
