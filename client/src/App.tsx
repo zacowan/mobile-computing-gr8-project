@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 // Components & Pages
 import HomePage from "./pages/home";
@@ -14,7 +14,16 @@ import MockThings from "./mock/things";
 import MockServices from "./mock/services";
 import MockApps from "./mock/apps";
 
+const DATA_FETCH_RATE_MS = 5000; // 5 seconds
+
 const App: React.FC = () => {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log("I'm inside of setInterval()");
+    }, DATA_FETCH_RATE_MS);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="flex divide-x-2">
       <NavSidebar />
@@ -25,7 +34,7 @@ const App: React.FC = () => {
           apps: MockApps,
         }}
       >
-        <div className="h-screen w-full px-10 py-20">
+        <div className="h-screen w-full overflow-x-auto px-10 py-20">
           <Routes>
             <Route index element={<Navigate to="home" />} />
             <Route path="home" element={<HomePage />}>
