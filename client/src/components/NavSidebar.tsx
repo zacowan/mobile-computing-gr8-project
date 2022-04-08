@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 import NavButton from "./NavButton";
-import { HomeIcon, TerminalIcon, CogIcon } from "../assets/icons";
+import { HomeIcon, TerminalIcon } from "../assets/icons";
 
 type Props = {
   isConnectedDiscover: boolean;
@@ -37,7 +37,7 @@ const NavSidebar: FC<Props> = ({
         </span>
         <div className="rounded bg-slate-100 px-5 py-3 text-sm font-light text-slate-600">
           <span className="flex items-center font-normal text-slate-900">
-            Things/Services
+            Things & Services
           </span>
           <span className="block">
             {isConnectedDiscover ? "Connected" : "Not connected"}
