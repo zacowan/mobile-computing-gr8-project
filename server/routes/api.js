@@ -74,6 +74,12 @@ router.get("/discover", function (req, res, next) {
       services: [],
     };
 
+    // Handle response if no tweets
+    if (!tweets) {
+      res.send(tweets_to_send);
+      return;
+    }
+
     let ungrouped_service_tweets = [];
     let grouped_service_tweets = {};
 

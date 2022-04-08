@@ -10,35 +10,46 @@ import SettingsPage from "./pages/Settings";
 import AppEditorPage from "./pages/AppEditor";
 import NavSidebar from "./components/NavSidebar";
 // Data
+import type { DiscoverData } from "./types/DiscoverData";
 import DataContext from "./DataContext";
-import MockThings from "./mock/things";
-import MockServices from "./mock/services";
 import MockApps from "./mock/apps";
 import fetchDiscover from "./utils/apiCalls/fetchDiscover";
 
 const DATA_FETCH_RATE_MS = 5000; // 5 seconds
 
 const App: React.FC = () => {
-  const discoverData = useQuery("discover", fetchDiscover);
+  const discoverData = useQuery<DiscoverData, Error>(
+    "discover",
+    fetchDiscover,
+    {
+      initialData: {
+        things: [],
+        services: [],
+      },
+    }
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
       discoverData.refetch();
     }, DATA_FETCH_RATE_MS);
     return () => clearInterval(interval);
-  }, []);
+  }, [discoverData]);
 
   return (
     <div className="flex divide-x-2">
-      <NavSidebar />
-      <DataContext.Provider
-        value={{
-          things: discoverData.data.things,
-          services: discoverData.data.services,
-          apps: MockApps,
-        }}
-      >
-        <div className="h-screen w-full overflow-x-auto px-10 py-20">
+      <NavSidebar
+        isConnected={discoverData.isFetched && discoverData.isSuccess}
+        errorMessage={discoverData.error?.message}
+      />
+      <div className="h-screen w-full overflow-x-auto px-10 py-20">
+        <DataContext.Provider
+          value={{
+            things: discoverData.data!.things,
+            services: discoverData.data!.services,
+            apps: MockApps,
+          }}
+        >
           <Routes>
             <Route index element={<Navigate to="home" />} />
             <Route path="home" element={<HomePage />}>
@@ -51,8 +62,8 @@ const App: React.FC = () => {
             <Route path="settings" element={<SettingsPage />} />
             <Route path="*" element={<h1>No match</h1>} />
           </Routes>
-        </div>
-      </DataContext.Provider>
+        </DataContext.Provider>
+      </div>
     </div>
   );
 };
