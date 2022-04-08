@@ -1,14 +1,19 @@
 import React, { FC } from "react";
 
 import NavButton from "./NavButton";
-import { HomeIcon, TerminalIcon } from "../assets/icons";
+import { HomeIcon, TerminalIcon, CogIcon } from "../assets/icons";
 
 type Props = {
-  isConnected: boolean;
-  errorMessage?: string;
+  isFetchingDiscover: boolean;
+  isConnectedDiscover: boolean;
+  errorMessageDiscover?: string;
 };
 
-const NavSidebar: FC<Props> = ({ isConnected, errorMessage }) => {
+const NavSidebar: FC<Props> = ({
+  isConnectedDiscover,
+  errorMessageDiscover,
+  isFetchingDiscover,
+}) => {
   return (
     <div className="h-screen max-w-xs px-10 py-20">
       {/* Title */}
@@ -28,18 +33,29 @@ const NavSidebar: FC<Props> = ({ isConnected, errorMessage }) => {
         </ul>
       </nav>
       {/* Status */}
-      <div className="space-y-2">
+      <div className="space-y-5">
         <span className="block text-center text-lg font-medium">
           API Status
         </span>
-        <div className="text-sm font-light text-slate-600">
-          <span className="block font-normal text-slate-900">
+        <div className="rounded bg-slate-100 px-5 py-3 text-sm font-light text-slate-600">
+          <span className="flex items-center font-normal text-slate-900">
             Things/Services
+            <CogIcon
+              className={`ml-1 inline h-3 w-3 animate-spin text-slate-600 transition-opacity ${
+                isFetchingDiscover ? "opacity-0" : "opacity-100"
+              }`}
+            />
           </span>
           <span className="block">
-            {isConnected ? "Connected" : "Not connected"}
+            {isConnectedDiscover ? "Connected" : "Not connected"}
           </span>
-          <span className="block">{errorMessage || "No errors"}</span>
+          <span
+            className={`block ${
+              errorMessageDiscover ? "text-red-600" : "text-green-600"
+            }`}
+          >
+            {errorMessageDiscover || "No errors"}
+          </span>
         </div>
       </div>
     </div>

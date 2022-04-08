@@ -39,8 +39,9 @@ const App: React.FC = () => {
   return (
     <div className="flex divide-x-2">
       <NavSidebar
-        isConnected={discoverData.isFetched && discoverData.isSuccess}
-        errorMessage={discoverData.error?.message}
+        isFetchingDiscover={discoverData.isFetching}
+        isConnectedDiscover={discoverData.isFetched && discoverData.isSuccess}
+        errorMessageDiscover={discoverData.error?.message}
       />
       <div className="h-screen w-full overflow-x-auto px-10 py-20">
         <DataContext.Provider
