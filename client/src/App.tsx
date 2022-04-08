@@ -39,7 +39,6 @@ const App: React.FC = () => {
   return (
     <div className="flex divide-x-2">
       <NavSidebar
-        isFetchingDiscover={discoverData.isFetching}
         isConnectedDiscover={discoverData.isFetched && discoverData.isSuccess}
         errorMessageDiscover={discoverData.error?.message}
       />
