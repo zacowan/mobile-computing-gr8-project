@@ -2,10 +2,16 @@ export type App = {
   name: string;
   id: string;
   active: boolean;
-  lastActive: string; // timestamp
+  lastActive: number; // timestamp, Date.now()
   continuous: boolean;
   loopDelay?: number; // time to wait between loop calls, in ms
   components: Array<AppComponent>;
+  logs: Log[];
+};
+
+export type Log = {
+  timestamp: number; // Date.now()
+  message: string;
 };
 
 export type AppComponent = {
