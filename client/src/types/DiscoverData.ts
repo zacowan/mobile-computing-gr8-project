@@ -1,9 +1,7 @@
 import type { Thing } from "./thing";
 import type { Service } from "./service";
-import type { App } from "./app";
 
-export type Data = {
+export type DiscoverData = {
   things: Thing[];
   services: Service[];
-  apps: App[];
 };

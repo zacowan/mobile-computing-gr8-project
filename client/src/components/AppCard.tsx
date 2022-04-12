@@ -11,12 +11,12 @@ import {
 import ConfirmDialog from "./ConfirmDialog";
 import Modal, { useModal } from "../components/Modal";
 import dayjs from "dayjs";
+import LogsSurface from "./LogsSurface";
 
 type Props = {
   app: App;
   onClickStart: () => Promise<void>;
   onClickStop: () => Promise<void>;
-  onClickLogs: () => Promise<void>;
   onClickEdit: () => Promise<void>;
   onClickDelete: () => Promise<void>;
 };
@@ -25,12 +25,12 @@ const AppCard: FC<Props> = ({
   app,
   onClickStart,
   onClickStop,
-  onClickLogs,
   onClickEdit,
   onClickDelete,
 }) => {
   const [startStopDisabled, setStartStopDisabled] = useState<boolean>(false);
-  const [modalActive, setModalActive] = useModal();
+  const [deleteModalActive, setDeleteModalActive] = useModal();
+  const [logsModalActive, setLogsModalActive] = useModal();
 
   const handleClickStartStop = async (
     callback: (() => Promise<void>) | undefined
@@ -44,28 +44,30 @@ const AppCard: FC<Props> = ({
 
   const handleDelete = async () => {
     await onClickDelete();
-    setModalActive(false);
+    setDeleteModalActive(false);
   };
-
-  console.log(new Date(Number(app.lastActive)));
 
   return (
     <div className="space-y-2 rounded border border-slate-200 p-5 shadow-md transition-colors hover:bg-slate-100">
       {/* Confirm Dialog Modal */}
-      <Modal active={modalActive}>
+      <Modal active={deleteModalActive}>
         <ConfirmDialog
           title={`Delete ${app.name}`}
           description="Are you sure you want to delete this app?"
           onConfirm={handleDelete}
-          onCancel={() => setModalActive(false)}
+          onCancel={() => setDeleteModalActive(false)}
         />
+      </Modal>
+      {/* Logs Surface Modal */}
+      <Modal active={logsModalActive}>
+        <LogsSurface app={app} onClose={() => setLogsModalActive(false)} />
       </Modal>
       {/* Info */}
       <h1 className="text-xl font-medium tracking-tight">{app.name}</h1>
       <h2 className="text-sm font-light text-slate-600">
         {app.active
           ? "Active now"
-          : `Last active: ${dayjs(new Date(Number(app.lastActive))).fromNow()}`}
+          : `Last active: ${dayjs(new Date(app.lastActive)).fromNow()}`}
       </h2>
       {/* Buttons */}
       <div className="flex items-center space-x-3 pt-2">
@@ -91,7 +93,7 @@ const AppCard: FC<Props> = ({
         {!app.active && (
           <>
             <button
-              onClick={onClickLogs}
+              onClick={() => setLogsModalActive(true)}
               className="text-slate-600 hover:text-slate-700"
             >
               <ReportIcon />
@@ -105,7 +107,7 @@ const AppCard: FC<Props> = ({
             </button>
             {/* Delete */}
             <button
-              onClick={() => setModalActive(true)}
+              onClick={() => setDeleteModalActive(true)}
               className="text-slate-600 hover:text-slate-700"
             >
               <TrashIcon />

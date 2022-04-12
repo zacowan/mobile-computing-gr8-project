@@ -44,7 +44,6 @@ const AppsPage: FC = () => {
             <AppCard
               onClickDelete={async () => {}}
               onClickEdit={async () => {}}
-              onClickLogs={async () => {}}
               onClickStart={async () => {}}
               onClickStop={async () => {}}
               app={app}

@@ -6,8 +6,26 @@ const MockApps: Array<App> = [
     name: "Toggle LED",
     id: "1241252512asdfasdfas",
     active: false,
-    lastActive: Date.now().toString(),
+    lastActive: Date.now(),
     continuous: false,
+    logs: [
+      {
+        timestamp: Date.now(),
+        message: "Made call to get_led",
+      },
+      {
+        timestamp: Date.now(),
+        message: "Made call to get_led",
+      },
+      {
+        timestamp: Date.now(),
+        message: "Made call to get_led",
+      },
+      {
+        timestamp: Date.now(),
+        message: "Made call to get_led",
+      },
+    ],
     components: [
       {
         relationship: undefined,
@@ -25,8 +43,14 @@ const MockApps: Array<App> = [
     name: "Turn LED On When Dark",
     id: "asdfgh",
     active: true,
-    lastActive: Date.now().toString(),
+    lastActive: Date.now(),
     continuous: true,
+    logs: [
+      {
+        timestamp: Date.now(),
+        message: "Made call to get_led",
+      },
+    ],
     components: [
       {
         relationship: "Control",
@@ -50,8 +74,14 @@ const MockApps: Array<App> = [
     name: "Turn LED Off When Light",
     id: "asdfgh",
     active: false,
-    lastActive: Date.now().toString(),
+    lastActive: Date.now(),
     continuous: true,
+    logs: [
+      {
+        timestamp: Date.now(),
+        message: "Made call to get_led",
+      },
+    ],
     components: [
       {
         relationship: "Control",

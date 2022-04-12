@@ -1,23 +1,29 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 
 dayjs.extend(relativeTime);
+dayjs.extend(localizedFormat);
+
+const queryClient = new QueryClient();
 
 const container = document.getElementById("root");
-// @ts-ignore
-const root = createRoot(container);
-root.render(
+ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
+  </React.StrictMode>,
+  container
 );
 
 // If you want to start measuring performance in your app, pass a function

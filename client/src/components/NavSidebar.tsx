@@ -1,15 +1,23 @@
 import React, { FC } from "react";
 
 import NavButton from "./NavButton";
-import { HomeIcon, TerminalIcon, SettingsIcon } from "../assets/icons";
+import { HomeIcon, TerminalIcon } from "../assets/icons";
 
-const NavSidebar: FC = () => {
+type Props = {
+  isConnectedDiscover: boolean;
+  errorMessageDiscover?: string;
+};
+
+const NavSidebar: FC<Props> = ({
+  isConnectedDiscover,
+  errorMessageDiscover,
+}) => {
   return (
-    <div className="h-screen px-10 py-20">
+    <div className="h-screen max-w-xs px-10 py-20">
       {/* Title */}
       <div className="text-center">
-        <h1 className="text-lg font-medium">Atlas IoT IDE</h1>
-        <h2 className="text-xs font-light text-slate-600">GR8</h2>
+        <span className="block text-lg font-medium">Atlas IoT IDE</span>
+        <span className="block text-xs font-light text-slate-600">GR8</span>
       </div>
       {/* Navigation */}
       <nav className="py-20">
@@ -20,21 +28,29 @@ const NavSidebar: FC = () => {
           <li>
             <NavButton icon={<TerminalIcon />} text={"Apps"} to="apps" />
           </li>
-          <li>
-            <NavButton
-              icon={<SettingsIcon />}
-              text={"Settings"}
-              to="settings"
-            />
-          </li>
         </ul>
       </nav>
-      {/* Version */}
-      {process.env.REACT_APP_VERSION && (
-        <div className="px-5 py-3 text-center text-xs font-light text-slate-600">
-          Version {process.env.REACT_APP_VERSION}
+      {/* Status */}
+      <div className="space-y-5">
+        <span className="block text-center text-lg font-medium">
+          API Status
+        </span>
+        <div className="rounded bg-slate-100 px-5 py-3 text-sm font-light text-slate-600">
+          <span className="flex items-center font-normal text-slate-900">
+            Things & Services
+          </span>
+          <span className="block">
+            {isConnectedDiscover ? "Connected" : "Not connected"}
+          </span>
+          <span
+            className={`block ${
+              errorMessageDiscover ? "text-red-600" : "text-green-600"
+            }`}
+          >
+            {errorMessageDiscover || "No errors"}
+          </span>
         </div>
-      )}
+      </div>
     </div>
   );
 };
