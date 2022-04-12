@@ -9,11 +9,12 @@ const Button: FC<Props & React.ComponentProps<"button">> = ({
   primary,
   icon,
   children,
+  className,
   ...props
 }) => {
   return (
     <button
-      className={`w-fit rounded ${
+      className={`${className} w-fit rounded ${
         primary ? "bg-blue-600" : "bg-slate-100"
       } px-5 py-3 transition-colors ${
         primary ? "hover:bg-blue-700" : "hover:bg-slate-200"

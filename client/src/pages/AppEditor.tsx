@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Button from "../components/Button";
+import { PlusIcon } from "../assets/icons";
 
 const AppEditorPage: FC = () => {
   const [name, setName] = useState<string>();
@@ -22,7 +23,22 @@ const AppEditorPage: FC = () => {
           onChange={(e) => setName(e.target.value)}
           value={name}
         />
-        <div>S/R here</div>
+        <div className="space-y-5">
+          <div className="flex w-full max-w-prose">
+            <Button className="mr-5" icon={<PlusIcon />}>
+              Add Relationship
+            </Button>
+            <Button icon={<PlusIcon />}>Add Service</Button>
+            <Button className="ml-auto">Clear</Button>
+          </div>
+          <div className="max-w-prose space-y-5 rounded bg-slate-100 p-5">
+            <span className="block font-mono">start_app</span>
+            <div className="rounded bg-slate-50 p-5 text-sm font-light text-slate-600">
+              Add a relationship or service to start.
+            </div>
+            <span className="block font-mono">end_app</span>
+          </div>
+        </div>
         <div className="flex space-x-5">
           <Button type="submit" primary>
             Finalize
