@@ -1,19 +1,11 @@
 var PORT = 1235;
 var dgram = require("dgram");
 var client = dgram.createSocket("udp4");
-var redis = require("redis");
+var { setData, redisClient } = require("../utils/redis")
 
 let tweets = [];
 
-const connectToRedis = async () => {
-  await redisClient.connect();
-};
-
-const tweetsToRedis = async (tweets) => {
-  await redisClient.set("tweets", JSON.stringify(tweets));
-};
-
-client.on("listening", function () {
+client.on("listening", () => {
   var address = client.address();
   console.log(
     "UDP Client listening on " + address.address + ":" + address.port
@@ -23,7 +15,7 @@ client.on("listening", function () {
   client.addMembership("232.1.1.1");
 });
 
-client.on("message", function (message, remote) {
+client.on("message", async function (message, remote) {
   const decodedMessage = JSON.parse(message.toString());
 
   // Ignore Identity_Entity tweets for simplicity
@@ -54,11 +46,14 @@ client.on("message", function (message, remote) {
 
   console.log(tweets);
   console.log(tweets.length);
-  tweetsToRedis(tweets);
+  await setData("tweets", tweets);
 });
 
-const redisClient = redis.createClient();
-redisClient.on("error", (err) => console.log("Redis Client Error", err));
-connectToRedis();
+redisClient.on("error", (err) => console.log("Redis Client error --> ", err));
 
-client.bind(PORT);
+redisClient.connect().then(() => {
+  // Bind the client
+  client.bind(PORT);
+}).catch((err) => {
+  console.log("Redis Connection error --> " + err);
+})

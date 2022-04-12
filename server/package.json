@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "concurrently 'npm:server' 'npm:discover'",
-    "server": "node ./bin/www",
-    "discover": "node ./discover/discover.js"
+    "server": "nodemon ./bin/www",
+    "discover": "nodemon ./discover/discover.js"
   },
   "dependencies": {
     "concurrently": "^7.1.0",
@@ -15,6 +15,7 @@
     "dgram": "^1.0.1",
     "express": "~4.16.1",
     "morgan": "~1.9.1",
-    "redis": "^4.0.6"
+    "redis": "^4.0.6",
+    "uuid": "^8.3.2"
   }
 }
