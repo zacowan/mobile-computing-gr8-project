@@ -25,4 +25,5 @@ export type AppService = {
   name: string;
   thingID: string;
   input?: string;
+  output?: boolean;
 };

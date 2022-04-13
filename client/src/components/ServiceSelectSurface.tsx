@@ -12,9 +12,15 @@ export type Props = {
   onSelect: (service: AppService) => void;
   onClose: () => void;
   title?: string;
+  serviceRequirement?: "input" | "output";
 };
 
-const ServiceSelectSurface: FC<Props> = ({ onSelect, onClose, title }) => {
+const ServiceSelectSurface: FC<Props> = ({
+  onSelect,
+  onClose,
+  title,
+  serviceRequirement,
+}) => {
   const { services } = useContext(DataContext);
   const [filteredServices, setFilteredServices] = useState<Array<Service>>();
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -25,14 +31,24 @@ const ServiceSelectSurface: FC<Props> = ({ onSelect, onClose, title }) => {
       "thingID",
       "keywords",
     ]);
-    setFilteredServices(filtered);
-  }, [services, searchTerm]);
+    const secondFiltered = filtered.filter((val) => {
+      if (serviceRequirement === "output") {
+        return val.output !== "NULL";
+      } else if (serviceRequirement === "input") {
+        return val.inputs.length > 0;
+      } else {
+        return true;
+      }
+    });
+    setFilteredServices(secondFiltered);
+  }, [services, searchTerm, serviceRequirement]);
 
   const handleSelect = (service: Service, input?: string) => {
     const appService: AppService = {
       name: service.name,
       thingID: service.thingID,
       input: input,
+      output: service.output === "int",
     };
     onSelect(appService);
     onClose();
@@ -67,7 +83,9 @@ const ServiceSelectSurface: FC<Props> = ({ onSelect, onClose, title }) => {
               <tr>
                 <th className="py-3 pl-5 font-medium">Name</th>
                 <th className="py-3 pr-5 font-medium">Thing ID</th>
-                <th className="py-3 pr-5 font-medium">Input</th>
+                {serviceRequirement !== "input" && (
+                  <th className="py-3 pr-5 font-medium">Input</th>
+                )}
                 <th className="py-3 pr-5 font-medium">
                   <span className="sr-only">Choose</span>
                 </th>
@@ -86,15 +104,18 @@ const ServiceSelectSurface: FC<Props> = ({ onSelect, onClose, title }) => {
                       id={`form-service-${index}`}
                       onSubmit={(e) => handleFormSubmit(e, service)}
                     >
-                      {service.inputs.length > 0 ? (
+                      {service.inputs.length > 0 &&
+                      serviceRequirement !== "input" ? (
                         <TextInput
                           required
                           className="w-36"
                           placeholder="Value"
                           name="input"
                         />
-                      ) : (
+                      ) : serviceRequirement !== "input" ? (
                         "None"
+                      ) : (
+                        "Input from Service A"
                       )}
                     </form>
                   </td>

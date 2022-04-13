@@ -52,6 +52,7 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
         <ServiceSelectSurface
           onClose={() => setServAModalActive(false)}
           onSelect={(as) => setServiceA(as)}
+          serviceRequirement={relationship === "drive" ? "output" : undefined}
         />
       </Modal>
       {/* Service B modal */}
@@ -59,6 +60,7 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
         <ServiceSelectSurface
           onClose={() => setServBModalActive(false)}
           onSelect={(as) => setServiceB(as)}
+          serviceRequirement={relationship === "drive" ? "input" : undefined}
         />
       </Modal>
       <h1 className="text-lg font-medium">Add relationship</h1>
@@ -76,19 +78,25 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
             />
           </div>
           {/* Services */}
-          <div className="flex flex-col space-y-2">
-            <label>Services</label>
-            <div className="flex space-x-5">
-              <Button onClick={() => setServAModalActive(true)} type="button">
-                {serviceA === undefined ? "Service A" : serviceA.name}
-              </Button>
-              <Button onClick={() => setServBModalActive(true)} type="button">
-                {serviceB === undefined ? "Service B" : serviceB.name}
-              </Button>
+          {relationship !== "" && (
+            <div className="flex flex-col space-y-2">
+              <label>Services</label>
+              <div className="flex space-x-5">
+                <Button onClick={() => setServAModalActive(true)} type="button">
+                  {serviceA === undefined
+                    ? "Service A"
+                    : `${serviceA.name}(${serviceA.input || ""})`}
+                </Button>
+                <Button onClick={() => setServBModalActive(true)} type="button">
+                  {serviceB === undefined
+                    ? "Service B"
+                    : `${serviceB.name}(${serviceB.input || ""})`}
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
           {/* Operator + compare value */}
-          {relationship === "control" && (
+          {relationship === "control" && serviceA && serviceA.output === true && (
             <>
               <div className="flex flex-col space-y-2">
                 <label>Operator</label>
