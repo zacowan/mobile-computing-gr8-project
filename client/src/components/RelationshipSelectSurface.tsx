@@ -130,7 +130,7 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
                 />
               </div>
               <div className="flex flex-col space-y-2">
-                <label>Compare Value for output of {serviceA.name}</label>
+                <label>Compare value for output of {serviceA.name}</label>
                 <TextInput
                   required
                   onChange={(e) => setCompareValue(e.target.value)}
