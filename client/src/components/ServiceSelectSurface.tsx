@@ -83,9 +83,7 @@ const ServiceSelectSurface: FC<Props> = ({
               <tr>
                 <th className="py-3 pl-5 font-medium">Name</th>
                 <th className="py-3 pr-5 font-medium">Thing ID</th>
-                {serviceRequirement !== "input" && (
-                  <th className="py-3 pr-5 font-medium">Input</th>
-                )}
+                <th className="py-3 pr-5 font-medium">Input</th>
                 <th className="py-3 pr-5 font-medium">
                   <span className="sr-only">Choose</span>
                 </th>

@@ -25,6 +25,14 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
   const [servAModalActive, setServAModalActive] = useModal();
   const [servBModalActive, setServBModalActive] = useModal();
 
+  const handleSelectRelationship: React.ChangeEventHandler<
+    HTMLSelectElement
+  > = (e) => {
+    setServiceA(undefined);
+    setServiceB(undefined);
+    setRelationship(e.target.value);
+  };
+
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     handleAdd();
@@ -71,7 +79,7 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
             <label>Relationship Type</label>
             <Select
               required
-              onChange={(e) => setRelationship(e.target.value)}
+              onChange={handleSelectRelationship}
               value={relationship}
               className="w-fit"
               options={RELATIONSHIP_OPTIONS}
