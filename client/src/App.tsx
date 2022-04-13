@@ -13,6 +13,7 @@ import NavSidebar from "./components/NavSidebar";
 import type { DiscoverData } from "./types/DiscoverData";
 import DataContext from "./DataContext";
 import MockApps from "./mock/apps";
+import MockServices from "./mock/services";
 import fetchDiscover from "./utils/apiCalls/fetchDiscover";
 
 const DATA_FETCH_RATE_MS = 5000; // 5 seconds
@@ -46,7 +47,7 @@ const App: React.FC = () => {
         <DataContext.Provider
           value={{
             things: discoverData.data!.things,
-            services: discoverData.data!.services,
+            services: MockServices,
             apps: MockApps,
           }}
         >

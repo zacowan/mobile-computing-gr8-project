@@ -54,12 +54,12 @@ const MockApps: Array<App> = [
     components: [
       {
         relationship: "Control",
+        operator: ">=",
+        outputCompare: 50,
         services: [
           {
             name: "get_light",
             thingID: "thing_02",
-            operator: ">=",
-            outputCompare: "50",
           },
           {
             name: "toggle_led",
@@ -85,12 +85,12 @@ const MockApps: Array<App> = [
     components: [
       {
         relationship: "Control",
+        operator: "<",
+        outputCompare: 50,
         services: [
           {
             name: "get_light",
             thingID: "thing_02",
-            operator: "<",
-            outputCompare: "50",
           },
           {
             name: "toggle_led",
