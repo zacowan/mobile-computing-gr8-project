@@ -34,7 +34,7 @@ const AppsPage: FC = () => {
           >
             Create App
           </Button>
-          <Button>Upload App</Button>
+          {/* <Button>Upload App</Button> */}
         </div>
       </div>
       {/* Apps */}
