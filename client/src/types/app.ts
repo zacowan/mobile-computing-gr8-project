@@ -18,7 +18,7 @@ export type AppComponent = {
   relationship?: string; // can be a relationship, or not
   services: Array<AppService>; // can be 1 service, or 2 services in the context of a relationship
   operator?: string; // used for if-then relationship
-  outputCompare?: number; // used for if-then relationship; if $output $operator $outputCompare is true, then run the next service
+  outputCompare?: string; // used for if-then relationship; if $output $operator $outputCompare is true, then run the next service
 };
 
 export type AppService = {

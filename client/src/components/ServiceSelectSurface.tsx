@@ -3,12 +3,13 @@ import React, { FC, useContext, useState, useEffect } from "react";
 import Button from "./Button";
 import DataContext from "../DataContext";
 import type { Service } from "../types/service";
+import type { AppService } from "../types/app";
 import { getSearchResults } from "../utils/search";
 import SearchBar from "./SearchBar";
 import TextInput from "./TextInput";
 
 export type Props = {
-  onSelect: (service: Service, input: number) => void;
+  onSelect: (service: AppService) => void;
   onClose: () => void;
   title?: string;
 };
@@ -16,7 +17,7 @@ export type Props = {
 const ServiceSelectSurface: FC<Props> = ({ onSelect, onClose, title }) => {
   const { services } = useContext(DataContext);
   const [filteredServices, setFilteredServices] = useState<Array<Service>>();
-  const [searchTerm, setSearchTerm] = useState<string>();
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const filtered = getSearchResults(searchTerm, services, [
@@ -27,8 +28,13 @@ const ServiceSelectSurface: FC<Props> = ({ onSelect, onClose, title }) => {
     setFilteredServices(filtered);
   }, [services, searchTerm]);
 
-  const handleSelect = (service: Service, input: number) => {
-    onSelect(service, input);
+  const handleSelect = (service: Service, input?: string) => {
+    const appService: AppService = {
+      name: service.name,
+      thingID: service.thingID,
+      input: input,
+    };
+    onSelect(appService);
     onClose();
   };
 
@@ -38,8 +44,9 @@ const ServiceSelectSurface: FC<Props> = ({ onSelect, onClose, title }) => {
   ) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    const input = Number(data.get("input"));
-    handleSelect(s, input);
+    const input = data.get("input");
+    const parsedInput = input === null ? undefined : String(input);
+    handleSelect(s, parsedInput);
   };
 
   return (
@@ -48,7 +55,9 @@ const ServiceSelectSurface: FC<Props> = ({ onSelect, onClose, title }) => {
       <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
       {filteredServices && filteredServices.length === 0 && (
         <span className="block text-sm font-light text-slate-600">
-          Waiting for services to be declared in the smart space...
+          {services.length === 0
+            ? "Waiting for services to be declared in the smart space..."
+            : `No services match the term ${searchTerm}.`}
         </span>
       )}
       {filteredServices && filteredServices.length > 0 && (
@@ -80,7 +89,6 @@ const ServiceSelectSurface: FC<Props> = ({ onSelect, onClose, title }) => {
                       {service.inputs.length > 0 ? (
                         <TextInput
                           required
-                          type="number"
                           className="w-36"
                           placeholder="Value"
                           name="input"
@@ -91,7 +99,11 @@ const ServiceSelectSurface: FC<Props> = ({ onSelect, onClose, title }) => {
                     </form>
                   </td>
                   <td className="py-3 pr-5">
-                    <Button type="submit" form={`form-service-${index}`}>
+                    <Button
+                      primary
+                      type="submit"
+                      form={`form-service-${index}`}
+                    >
                       Select
                     </Button>
                   </td>

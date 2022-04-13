@@ -8,7 +8,7 @@ import { getSearchResults } from "../../utils/search";
 
 const ThingsPage: FC = () => {
   const { things } = useContext(DataContext);
-  const [searchTerm, setSearchTerm] = useState<string>();
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredThings, setFilteredThings] = useState<Array<Thing>>();
 
   useEffect(() => {

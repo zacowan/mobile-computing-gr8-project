@@ -9,7 +9,7 @@ import { getSearchResults } from "../../utils/search";
 const ServicesPage: FC = () => {
   const { services } = useContext(DataContext);
   const [filteredServices, setFilteredServices] = useState<Array<Service>>();
-  const [searchTerm, setSearchTerm] = useState<string>();
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const filtered = getSearchResults(searchTerm, services, [

@@ -55,7 +55,7 @@ const MockApps: Array<App> = [
       {
         relationship: "Control",
         operator: ">=",
-        outputCompare: 50,
+        outputCompare: "50",
         services: [
           {
             name: "get_light",
@@ -86,7 +86,7 @@ const MockApps: Array<App> = [
       {
         relationship: "Control",
         operator: "<",
-        outputCompare: 50,
+        outputCompare: "50",
         services: [
           {
             name: "get_light",
@@ -95,7 +95,7 @@ const MockApps: Array<App> = [
           {
             name: "toggle_led",
             thingID: "thing_01",
-            input: "0",
+            input: "1",
           },
         ],
       },

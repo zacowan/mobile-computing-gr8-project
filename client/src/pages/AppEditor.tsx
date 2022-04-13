@@ -5,16 +5,19 @@ import Button from "../components/Button";
 import { PlusIcon } from "../assets/icons";
 import Modal, { useModal } from "../components/Modal";
 import RelationshipSelectSurface from "../components/RelationshipSelectSurface";
-import type { AppComponent } from "../types/app";
+import type { AppComponent, AppService } from "../types/app";
 import TextInput from "../components/TextInput";
 import Select from "../components/Select";
+import ServiceSelectSurface from "../components/ServiceSelectSurface";
+import AppComponentCard from "../components/AppComponentCard";
 
 const AppEditorPage: FC = () => {
   const [components, setComponents] = useState<AppComponent[]>([]);
   const [name, setName] = useState<string>("");
-  const [isContinuous, setIsContinuous] = useState<string>();
+  const [isContinuous, setIsContinuous] = useState<string>("");
   const [loopDelay, setLoopDelay] = useState<number>();
   const [relModalActive, setRelModalActive] = useModal();
+  const [servModalActive, setServModalActive] = useModal();
   const navigate = useNavigate();
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -23,20 +26,26 @@ const AppEditorPage: FC = () => {
 
   const handleReset: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    setName("");
-    setIsContinuous("");
-    setLoopDelay(undefined);
     setComponents([]);
   };
 
   const handleAddRelationship = (ac: AppComponent) => {
-    console.log(ac);
+    setComponents([...components, ac]);
   };
 
-  const handleUpdateComponent = (comp: AppComponent, index: number) => {
-    let comps = [...components];
-    comps.splice(index, 1, comp);
-    setComponents(comps);
+  const handleAddService = (as: AppService) => {
+    const ac: AppComponent = {
+      services: [as],
+    };
+    setComponents([...components, ac]);
+  };
+
+  const handleDeleteComponent = (index: number) => {
+    const newComponents = [
+      ...components.slice(0, index),
+      ...components.slice(index + 1),
+    ];
+    setComponents(newComponents);
   };
 
   return (
@@ -46,6 +55,14 @@ const AppEditorPage: FC = () => {
         <RelationshipSelectSurface
           onAdd={handleAddRelationship}
           onClose={() => setRelModalActive(false)}
+        />
+      </Modal>
+      {/* Service modal */}
+      <Modal active={servModalActive}>
+        <ServiceSelectSurface
+          title="Add service"
+          onSelect={handleAddService}
+          onClose={() => setServModalActive(false)}
         />
       </Modal>
       <h1 className="text-6xl">New App</h1>
@@ -76,14 +93,17 @@ const AppEditorPage: FC = () => {
           />
         </div>
         {isContinuous === "Continuous" && (
-          <TextInput
-            required
-            type="number"
-            placeholder="Loop delay (ms)"
-            className="w-fit"
-            value={loopDelay}
-            onChange={(e) => setLoopDelay(e.target.valueAsNumber)}
-          />
+          <div className="flex w-fit flex-col space-y-2">
+            <label>Loop Delay (ms)</label>
+            <TextInput
+              required
+              type="number"
+              placeholder="Delay"
+              className="w-fit"
+              value={loopDelay}
+              onChange={(e) => setLoopDelay(e.target.valueAsNumber)}
+            />
+          </div>
         )}
         <div className="flex flex-col space-y-2">
           <label>App Components</label>
@@ -98,7 +118,11 @@ const AppEditorPage: FC = () => {
               >
                 Add Relationship
               </Button>
-              <Button type="button" icon={<PlusIcon />}>
+              <Button
+                onClick={() => setServModalActive(true)}
+                type="button"
+                icon={<PlusIcon />}
+              >
                 Add Service
               </Button>
               <Button type="reset" className="ml-auto">
@@ -107,11 +131,16 @@ const AppEditorPage: FC = () => {
             </div>
             {/* Services + Relationships */}
             <div className="max-w-prose space-y-5 rounded border border-slate-200 p-5 shadow-md">
-              <span className="block font-mono">start_app</span>
+              <span className="block font-mono uppercase">start_app</span>
               {components.length > 0 ? (
                 <div className="space-y-5 divide-y  p-5">
-                  {components.map((comp, index) => (
-                    <div>{index}</div>
+                  {components.map((ac, index) => (
+                    <div className={index === 0 ? "" : "pt-5"} key={index}>
+                      <AppComponentCard
+                        onDelete={() => handleDeleteComponent(index)}
+                        ac={ac}
+                      />
+                    </div>
                   ))}
                 </div>
               ) : (
@@ -119,7 +148,7 @@ const AppEditorPage: FC = () => {
                   Add a relationship or service to start.
                 </div>
               )}
-              <span className="block font-mono">end_app</span>
+              <span className="block font-mono uppercase">end_app</span>
             </div>
           </div>
         </div>
