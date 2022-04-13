@@ -53,6 +53,19 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
     }
   };
 
+  const addButtonDisabled = () => {
+    if (!relationship) return true;
+    if (!serviceA || !serviceB) return true;
+    if (
+      relationship === "control" &&
+      serviceA.output !== undefined &&
+      (!operator || !compareValue)
+    )
+      return true;
+
+    return false;
+  };
+
   return (
     <div className="z-20 w-full max-w-prose space-y-10 rounded bg-white p-10 shadow-md">
       {/* Service A modal */}
@@ -107,7 +120,7 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
           {relationship === "control" && serviceA && serviceA.output === true && (
             <>
               <div className="flex flex-col space-y-2">
-                <label>Operator</label>
+                <label>Operator for output of {serviceA.name}</label>
                 <Select
                   required
                   onChange={(e) => setOperator(e.target.value)}
@@ -117,7 +130,7 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
                 />
               </div>
               <div className="flex flex-col space-y-2">
-                <label>Compare Value</label>
+                <label>Compare Value for output of {serviceA.name}</label>
                 <TextInput
                   required
                   onChange={(e) => setCompareValue(e.target.value)}
@@ -130,7 +143,7 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
           )}
         </div>
         <div className="flex space-x-5">
-          <Button type="submit" primary>
+          <Button disabled={addButtonDisabled()} type="submit" primary>
             Add
           </Button>
           <Button type="button" onClick={onClose}>

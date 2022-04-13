@@ -14,7 +14,7 @@ import AppComponentCard from "../components/AppComponentCard";
 const AppEditorPage: FC = () => {
   const [components, setComponents] = useState<AppComponent[]>([]);
   const [name, setName] = useState<string>("");
-  const [isContinuous, setIsContinuous] = useState<string>("");
+  const [appType, setAppType] = useState<string>("");
   const [loopDelay, setLoopDelay] = useState<number>();
   const [relModalActive, setRelModalActive] = useModal();
   const [servModalActive, setServModalActive] = useModal();
@@ -46,6 +46,14 @@ const AppEditorPage: FC = () => {
       ...components.slice(index + 1),
     ];
     setComponents(newComponents);
+  };
+
+  const finalizeButtonDisabled = () => {
+    if (!name || !appType) return true;
+    if (appType === "Continuous" && !loopDelay) return true;
+    if (components.length <= 0) return true;
+
+    return false;
   };
 
   return (
@@ -82,17 +90,17 @@ const AppEditorPage: FC = () => {
           />
         </div>
 
-        {/* Continuous */}
+        {/* App Type */}
         <div className="flex w-fit flex-col space-y-2">
           <label>App Type</label>
           <Select
             required
             options={["Single Use", "Continuous"]}
-            value={isContinuous}
-            onChange={(e) => setIsContinuous(e.target.value)}
+            value={appType}
+            onChange={(e) => setAppType(e.target.value)}
           />
         </div>
-        {isContinuous === "Continuous" && (
+        {appType === "Continuous" && (
           <div className="flex w-fit flex-col space-y-2">
             <label>Loop Delay (ms)</label>
             <TextInput
@@ -153,7 +161,7 @@ const AppEditorPage: FC = () => {
           </div>
         </div>
         <div className="flex space-x-5">
-          <Button type="submit" primary>
+          <Button disabled={finalizeButtonDisabled()} type="submit" primary>
             Finalize
           </Button>
           <Button type="button" onClick={() => navigate(-1)}>

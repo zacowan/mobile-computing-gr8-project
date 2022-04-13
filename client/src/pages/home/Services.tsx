@@ -26,7 +26,9 @@ const ServicesPage: FC = () => {
       <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
       {filteredServices && filteredServices.length === 0 && (
         <span className="block text-sm font-light text-slate-600">
-          Waiting for services to be declared in the smart space...
+          {services.length === 0
+            ? "Waiting for services to be declared in the smart space..."
+            : `No services match the term ${searchTerm}.`}
         </span>
       )}
       {filteredServices && filteredServices.length > 0 && (
