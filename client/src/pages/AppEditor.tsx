@@ -3,11 +3,19 @@ import { useNavigate } from "react-router-dom";
 
 import Button from "../components/Button";
 import { PlusIcon } from "../assets/icons";
+import Modal, { useModal } from "../components/Modal";
+import RelationshipSelectSurface from "../components/RelationshipSelectSurface";
+import type { AppComponent } from "../types/app";
+import AppComponentCard from "../components/AppComponentCard";
+
+const RELATIONSHIP_OPTIONS = ["drive", "control"];
 
 const AppEditorPage: FC = () => {
+  const [components, setComponents] = useState<AppComponent[]>([]);
   const [name, setName] = useState<string>("");
   const [isContinuous, setIsContinuous] = useState<boolean>(false);
   const [loopDelay, setLoopDelay] = useState<number>();
+  const [relModalActive, setRelModalActive] = useModal();
   const navigate = useNavigate();
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -19,10 +27,28 @@ const AppEditorPage: FC = () => {
     setName("");
     setIsContinuous(false);
     setLoopDelay(undefined);
+    setComponents([]);
+  };
+
+  const handleRelationshipSelect = (option: string) => {
+    // Update current component with relationship
+    const newComponent: AppComponent = {
+      services: [],
+      relationship: option,
+    };
+    setComponents([...components, newComponent]);
   };
 
   return (
     <div className="mt-20 w-full space-y-10">
+      {/* Relationship modal */}
+      <Modal active={relModalActive}>
+        <RelationshipSelectSurface
+          onSelect={handleRelationshipSelect}
+          onClose={() => setRelModalActive(false)}
+          options={RELATIONSHIP_OPTIONS}
+        />
+      </Modal>
       <h1 className="text-6xl">New App</h1>
       <form
         className="space-y-10"
@@ -63,7 +89,12 @@ const AppEditorPage: FC = () => {
         <div className="space-y-5">
           {/* Buttons */}
           <div className="flex w-full max-w-prose">
-            <Button type="button" className="mr-5" icon={<PlusIcon />}>
+            <Button
+              type="button"
+              className="mr-5"
+              icon={<PlusIcon />}
+              onClick={() => setRelModalActive(true)}
+            >
               Add Relationship
             </Button>
             <Button type="button" icon={<PlusIcon />}>
@@ -76,9 +107,17 @@ const AppEditorPage: FC = () => {
           {/* Services + Relationships */}
           <div className="max-w-prose space-y-5 rounded border border-slate-200 p-5 shadow-md">
             <span className="block font-mono">start_app</span>
-            <div className="rounded bg-slate-100 p-5 text-sm font-light">
-              Add a relationship or service to start.
-            </div>
+            {components.length > 0 ? (
+              <div className="space-y-5 divide-y  p-5">
+                {components.map((comp, index) => (
+                  <AppComponentCard key={index} component={comp} />
+                ))}
+              </div>
+            ) : (
+              <div className="rounded bg-slate-100 p-5 text-sm font-light">
+                Add a relationship or service to start.
+              </div>
+            )}
             <span className="block font-mono">end_app</span>
           </div>
         </div>
