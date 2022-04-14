@@ -2,16 +2,25 @@ import React, { FC } from "react";
 
 import NavButton from "./NavButton";
 import { HomeIcon, TerminalIcon, CogIcon } from "../assets/icons";
+import { UseQueryResult } from "react-query";
+import { DiscoverData } from "../types/DiscoverData";
 
 type Props = {
-  isConnectedDiscover: boolean;
-  errorMessageDiscover?: string;
+  discoverQueryResult: UseQueryResult<DiscoverData, Error>;
 };
 
-const NavSidebar: FC<Props> = ({
-  isConnectedDiscover,
-  errorMessageDiscover,
-}) => {
+const NavSidebar: FC<Props> = ({ discoverQueryResult }) => {
+  const determineConnectedStatus = (qr: UseQueryResult) => {
+    if (discoverQueryResult.isFetching) {
+      return "Attempting connection...";
+    }
+    if (discoverQueryResult.isFetched && discoverQueryResult.isSuccess) {
+      return "Connected";
+    } else {
+      return "Not connected";
+    }
+  };
+
   return (
     <div className="h-screen max-w-xs px-10 py-20">
       {/* Title */}
@@ -40,17 +49,17 @@ const NavSidebar: FC<Props> = ({
         </span>
         <div className="rounded bg-slate-100 px-5 py-3 text-sm font-light text-slate-600">
           <span className="flex items-center font-normal text-slate-900">
-            Things & Services
+            Things and Services
           </span>
           <span className="block">
-            {isConnectedDiscover ? "Connected" : "Not connected"}
+            {determineConnectedStatus(discoverQueryResult)}
           </span>
           <span
             className={`block ${
-              errorMessageDiscover ? "text-red-600" : "text-green-600"
+              discoverQueryResult.isError ? "text-red-600" : "text-green-600"
             }`}
           >
-            {errorMessageDiscover || "No errors"}
+            {discoverQueryResult.error?.message || "No errors"}
           </span>
         </div>
       </div>
