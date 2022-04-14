@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 import NavButton from "./NavButton";
-import { HomeIcon, TerminalIcon } from "../assets/icons";
+import { HomeIcon, TerminalIcon, CogIcon } from "../assets/icons";
 
 type Props = {
   isConnectedDiscover: boolean;
@@ -27,6 +27,9 @@ const NavSidebar: FC<Props> = ({
           </li>
           <li>
             <NavButton icon={<TerminalIcon />} text={"Apps"} to="apps" />
+          </li>
+          <li>
+            <NavButton icon={<CogIcon />} text={"Settings"} to="settings" />
           </li>
         </ul>
       </nav>
