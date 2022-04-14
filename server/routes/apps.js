@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var { setData, getData } = require('../utils/redis')
+var { setData, getData } = require('../utils/redis');
 var { v4: uuidv4 } = require('uuid');
 var fs = require("fs");
 
@@ -44,19 +44,21 @@ router.post("/create", async (req, res, next) => {
     // Get App Sent from Front-end in Request Body
     var { app } = req.body;
 
-    // Figure out working directory component
-    // getWorkDir
+    // Get the current working directory from Redis
+    const workingDir = await getData("workingDir") || "./default_workingDir/";
+
     // generate app id, which is the filename
     var appID = uuidv4();
     var filename = appID + ".js";
 
     // Generate code file and save to directory + filename
     //           "C://folder/"   + "uuid.js"
-    generateFile(app.workingDir + filename, app);
+    generateFile(workingDir + filename, app);
 
     // Save in redis with extra information
     const appToSave = {
       id: appID,
+      workingDir: workingDir,
       file: filename,
       logs: [],
       active: false,
@@ -73,17 +75,26 @@ router.post("/create", async (req, res, next) => {
 });
 
 router.get("/", async(req, res, next) => {
-  const { workingDir } = req.query
-  console.log(workingDir);
+  // Get the current working directory from Redis
+  const workingDir = await getData("workingDir") || "./default_workingDir/";
   // Get the apps from redis
   const apps = await getData("apps") || [];
-  // Filter out apps that are not in the provided workingDir?
+  // Filter out apps that are not in the current workingDir?
   // NOTE/TODO/DONT_MISS: For JSON objects, one / gets translated into //
   const filteredApps = apps.filter(app => {
     return (app.workingDir == workingDir)
   })
   // Return the apps
   res.send(filteredApps);
+});
+
+
+/* 
+* Temporary Endpoint, Clears all apps from the redis server
+*/
+router.delete("/clearall", async(req, res, next) => {
+  await setData("apps", undefined);
+  res.send({"status": "cleared"});
 });
 
 module.exports = router;
