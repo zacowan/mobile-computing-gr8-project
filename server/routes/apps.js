@@ -6,8 +6,8 @@ var fs = require("fs");
 
 /**
  * App data format provided by frontend:
- * 
- * 
+ *
+ *
  * export type App = {
   name: string;
   continuous: boolean;
@@ -45,7 +45,7 @@ router.post("/create", async (req, res, next) => {
     var { app } = req.body;
 
     // Get the current working directory from Redis
-    const workingDir = await getData("workingDir") || "./default_workingDir/";
+    const workingDir = await getData("workingDir") || (process.cwd() + "\\default_workingDir\\");
 
     // generate app id, which is the filename
     var appID = uuidv4();
@@ -76,7 +76,7 @@ router.post("/create", async (req, res, next) => {
 
 router.get("/", async(req, res, next) => {
   // Get the current working directory from Redis
-  const workingDir = await getData("workingDir") || "./default_workingDir/";
+  const workingDir = await getData("workingDir") || (process.cwd() + "\\default_workingDir\\");
   // Get the apps from redis
   const apps = await getData("apps") || [];
   // Filter out apps that are not in the current workingDir?
@@ -89,7 +89,7 @@ router.get("/", async(req, res, next) => {
 });
 
 
-/* 
+/*
 * Temporary Endpoint, Clears all apps from the redis server
 */
 router.delete("/clearall", async(req, res, next) => {

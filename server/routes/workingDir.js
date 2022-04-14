@@ -7,7 +7,7 @@ var { setData, getData } = require('../utils/redis');
 */
 router.get("/", async(req, res, next) => {
     // Get the WorkingDir in Redis
-    var workingDir = await getData("workingDir") || "./default_workingDir/";
+    var workingDir = await getData("workingDir") || (process.cwd() + "\\default_workingDir\\");
     res.send({"workingDir": workingDir});
   });
 
