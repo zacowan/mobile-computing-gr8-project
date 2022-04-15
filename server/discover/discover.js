@@ -1,7 +1,7 @@
 var PORT = 1235;
 var dgram = require("dgram");
 var client = dgram.createSocket("udp4");
-var { setData, redisClient } = require("../utils/redis")
+var { setData, redisClient } = require("../utils/redis");
 
 let tweets = [];
 
@@ -44,16 +44,19 @@ client.on("message", async function (message, remote) {
   } else {
   }
 
-  //console.log(tweets);
-  //console.log(tweets.length);
+  console.log(tweets);
+  console.log(tweets.length);
   await setData("tweets", tweets);
 });
 
 redisClient.on("error", (err) => console.log("Redis Client error --> ", err));
 
-redisClient.connect().then(() => {
-  // Bind the client
-  client.bind(PORT);
-}).catch((err) => {
-  console.log("Redis Connection error --> " + err);
-})
+redisClient
+  .connect()
+  .then(() => {
+    // Bind the client
+    client.bind(PORT);
+  })
+  .catch((err) => {
+    console.log("Redis Connection error --> " + err);
+  });

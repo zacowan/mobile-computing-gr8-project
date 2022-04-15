@@ -34,6 +34,7 @@ const MockApps: Array<App> = [
             name: "toggle_led",
             thingID: "thing_01",
             input: "1",
+            spaceID: "space_01",
           },
         ],
       },
@@ -60,11 +61,13 @@ const MockApps: Array<App> = [
           {
             name: "get_light",
             thingID: "thing_02",
+            spaceID: "space_01",
           },
           {
             name: "toggle_led",
             thingID: "thing_01",
             input: "1",
+            spaceID: "space_01",
           },
         ],
       },
@@ -91,11 +94,13 @@ const MockApps: Array<App> = [
           {
             name: "get_light",
             thingID: "thing_02",
+            spaceID: "space_01",
           },
           {
             name: "toggle_led",
             thingID: "thing_01",
             input: "1",
+            spaceID: "space_01",
           },
         ],
       },

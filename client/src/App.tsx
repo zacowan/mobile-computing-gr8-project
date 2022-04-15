@@ -15,7 +15,13 @@ import DataContext from "./DataContext";
 import MockApps from "./mock/apps";
 import MockServices from "./mock/services";
 import fetchDiscover from "./utils/apiCalls/fetchDiscover";
-import { DISCOVER_KEY, DATA_FETCH_RATE_MS } from "./utils/queryConstants";
+import {
+  DISCOVER_KEY,
+  DATA_FETCH_RATE_MS,
+  APP_KEY,
+} from "./utils/queryConstants";
+import { AppData } from "./types/AppData";
+import fetchApps from "./utils/apiCalls/fetchApps";
 
 const App: React.FC = () => {
   const discoverData = useQuery<DiscoverData, Error>(
@@ -29,16 +35,22 @@ const App: React.FC = () => {
       refetchInterval: DATA_FETCH_RATE_MS,
     }
   );
+  const appData = useQuery<AppData, Error>(APP_KEY, fetchApps, {
+    initialData: {
+      apps: [],
+    },
+    refetchInterval: DATA_FETCH_RATE_MS,
+  });
 
   return (
     <div className="flex divide-x-2">
-      <NavSidebar discoverQueryResult={discoverData} />
+      <NavSidebar appQueryResult={appData} discoverQueryResult={discoverData} />
       <div className="h-screen w-full overflow-x-auto px-10 py-20">
         <DataContext.Provider
           value={{
             things: discoverData.data!.things,
-            services: MockServices,
-            apps: MockApps,
+            services: discoverData.data!.services,
+            apps: appData.data!.apps,
           }}
         >
           <Routes>

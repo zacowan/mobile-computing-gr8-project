@@ -15,6 +15,7 @@ const MockServices: Array<Service> = [
     keywords: "LED,on,off",
     output: "NULL",
     thingID: "thing_01",
+    spaceID: "space_01",
     type: "Action",
   },
   {
@@ -26,6 +27,7 @@ const MockServices: Array<Service> = [
     keywords: "light,get",
     output: "int",
     thingID: "thing_02",
+    spaceID: "space_01",
     type: "TODO",
   },
   {
@@ -37,6 +39,7 @@ const MockServices: Array<Service> = [
     keywords: "button,press",
     output: "NULL",
     thingID: "thing_03",
+    spaceID: "space_01",
     type: "TODO",
   },
 ];

@@ -24,6 +24,7 @@ export type AppComponent = {
 export type AppService = {
   name: string;
   thingID: string;
+  spaceID: string;
   input?: string;
   output?: boolean;
 };

@@ -4,14 +4,16 @@ import NavButton from "./NavButton";
 import { HomeIcon, TerminalIcon, CogIcon } from "../assets/icons";
 import { UseQueryResult } from "react-query";
 import { DiscoverData } from "../types/DiscoverData";
+import { AppData } from "../types/AppData";
 
 type Props = {
   discoverQueryResult: UseQueryResult<DiscoverData, Error>;
+  appQueryResult: UseQueryResult<AppData, Error>;
 };
 
-const NavSidebar: FC<Props> = ({ discoverQueryResult }) => {
+const NavSidebar: FC<Props> = ({ discoverQueryResult, appQueryResult }) => {
   const determineConnectedStatus = (qr: UseQueryResult) => {
-    if (discoverQueryResult.isFetching) {
+    if (discoverQueryResult.isFetching && !discoverQueryResult.isSuccess) {
       return "Attempting connection...";
     }
     if (discoverQueryResult.isFetched && discoverQueryResult.isSuccess) {
@@ -60,6 +62,19 @@ const NavSidebar: FC<Props> = ({ discoverQueryResult }) => {
             }`}
           >
             {discoverQueryResult.error?.message || "No errors"}
+          </span>
+          <span className="flex items-center font-normal text-slate-900">
+            Apps
+          </span>
+          <span className="block">
+            {determineConnectedStatus(appQueryResult)}
+          </span>
+          <span
+            className={`block ${
+              appQueryResult.isError ? "text-red-600" : "text-green-600"
+            }`}
+          >
+            {appQueryResult.error?.message || "No errors"}
           </span>
         </div>
       </div>

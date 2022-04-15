@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var {getData} = require("../utils/redis");
+var { getData } = require("../utils/redis");
 
 const parseServiceTweetAPI = (serviceApi) => {
   // Split the parts of the string
@@ -53,7 +53,7 @@ const parseServiceTweet = (tweet) => {
 /* GET discoverd Atlas objects. */
 router.get("/", async (req, res, next) => {
   // Get the tweets from the discovery script
-  const tweets = await getData("tweets") || [];
+  const tweets = (await getData("tweets")) || [];
 
   // Define the tweets to send object that will contain the final [things] and [services]
   let tweets_to_send = {
@@ -108,7 +108,7 @@ router.get("/", async (req, res, next) => {
       });
 
       let thing = {
-        smartSpaceID: thing_tweet["Space ID"],
+        spaceID: thing_tweet["Space ID"],
         name: thing_tweet["Name"],
         description: thing_tweet["Description"],
         id: thing_id,
