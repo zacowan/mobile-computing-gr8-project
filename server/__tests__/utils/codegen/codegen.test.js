@@ -66,6 +66,10 @@ class TestApp {
   ) => {
     this.addComponent([serviceA, serviceB], "control", operator, outputCompare);
   };
+
+  addDriveRelationship = (serviceA = testService, serviceB = testService) => {
+    this.addComponent([serviceA, serviceB], "drive");
+  };
 }
 
 const getFileContent = (fname) => {
@@ -109,6 +113,28 @@ describe("codegen", () => {
       const compare = getFileContent(`${compareDir}/control_relationship.py`);
       expect(generated).toEqual(compare);
     });
+
+    it("generates code for a control relationship with operator/outputCompare", () => {
+      app.addControlRelationship("==", "1");
+      // Generate code file
+      generateCodeFile(app.toObject(), __dirname);
+      // Compare against expected
+      const generated = getFileContent(`${app.id}.py`);
+      const compare = getFileContent(
+        `${compareDir}/control_relationship_operator.py`
+      );
+      expect(generated).toEqual(compare);
+    });
+
+    it("generates code for a drive relationship", () => {
+      app.addDriveRelationship();
+      // Generate code file
+      generateCodeFile(app.toObject(), __dirname);
+      // Compare against expected
+      const generated = getFileContent(`${app.id}.py`);
+      const compare = getFileContent(`${compareDir}/drive_relationship.py`);
+      expect(generated).toEqual(compare);
+    });
   });
 
   describe("continuous apps", () => {
@@ -138,6 +164,28 @@ describe("codegen", () => {
       // Compare against expected
       const generated = getFileContent(`${app.id}.py`);
       const compare = getFileContent(`${compareDir}/control_relationship.py`);
+      expect(generated).toEqual(compare);
+    });
+
+    it("generates code for a control relationship with operator/outputCompare", () => {
+      app.addControlRelationship("==", "1");
+      // Generate code file
+      generateCodeFile(app.toObject(), __dirname);
+      // Compare against expected
+      const generated = getFileContent(`${app.id}.py`);
+      const compare = getFileContent(
+        `${compareDir}/control_relationship_operator.py`
+      );
+      expect(generated).toEqual(compare);
+    });
+
+    it("generates code for a drive relationship", () => {
+      app.addDriveRelationship();
+      // Generate code file
+      generateCodeFile(app.toObject(), __dirname);
+      // Compare against expected
+      const generated = getFileContent(`${app.id}.py`);
+      const compare = getFileContent(`${compareDir}/drive_relationship.py`);
       expect(generated).toEqual(compare);
     });
   });

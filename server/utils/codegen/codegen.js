@@ -41,20 +41,14 @@ const generateIfStatement = (condition, body) => {
   return "".concat("if ", condition, ":\n", TAB, body);
 };
 
-const generateServiceCall = (service, returnOutput = false) => {
-  if (returnOutput) {
-    return `requests.post(URL, json={'service': {'name': '${
-      service.name
-    }', 'thingID': '${service.thingID}', 'spaceID': '${
-      service.spaceID
-    }', 'input': '${service.input || ""}' }}).json()['output']`;
-  } else {
-    return `requests.post(URL, json={'service': {'name': '${
-      service.name
-    }', 'thingID': '${service.thingID}', 'spaceID': '${
-      service.spaceID
-    }', 'input': '${service.input || ""}' }})`;
-  }
+const generateServiceCall = (
+  service,
+  returnOutput = false,
+  quotesInput = true
+) => {
+  const suffix = returnOutput ? ".json()['output']" : "";
+  const input = quotesInput ? `'${service.input || ""}'` : `${service.input}`;
+  return `requests.post(URL, json={'service': {'name': '${service.name}', 'thingID': '${service.thingID}', 'spaceID': '${service.spaceID}', 'input': ${input} }})${suffix}`;
 };
 
 // IF (A() is successful OR A() operator outputCompare) THEN (B)
@@ -71,7 +65,7 @@ const generateControlStatement = (
     serviceBCall = TAB + serviceBCall;
   }
   if (operator && outputCompare) {
-    const condition = `${serviceACall} ${operator} ${outputCompare}`;
+    const condition = `${serviceACall} ${operator} '${outputCompare}'`;
     return generateIfStatement(condition, serviceBCall);
   } else {
     return generateIfStatement(serviceACall, serviceBCall);
@@ -87,9 +81,10 @@ const generateControlStatement = (
 };
  */
 const generateDriveStatement = (serviceA, serviceB) => {
-  const serviceACall = generateServiceCall(serviceA);
-  //use get to retrieve the output of serviceA
-  //post (generateServiceCall) serviceB with the output of serviceA as the inputs
+  let modifiedServiceB = { ...serviceB };
+  modifiedServiceB.input = generateServiceCall(serviceA, true);
+  const driveCall = generateServiceCall(modifiedServiceB, false, false);
+  return driveCall;
 };
 
 // service()
@@ -111,7 +106,7 @@ const generateCodeFile = (app, outputDirectory = __dirname) => {
         app.continuous
       );
     } else if (component.relationship === "drive") {
-      statement = generateControlStatement(
+      statement = generateDriveStatement(
         component.services[0],
         component.services[1]
       );
@@ -123,14 +118,14 @@ const generateCodeFile = (app, outputDirectory = __dirname) => {
   // Generate content
   let content = getBaseFileContent() + "\n";
   if (app.continuous) {
-    content = content.concat("while True:", "\n", TAB);
-    statements.forEach((stmt, index) => {
-      content = "".concat(content, stmt, "\n", TAB);
+    content = content.concat("while True:", "\n");
+    statements.forEach((stmt) => {
+      content = content.concat(TAB, stmt, "\n");
     });
-    content = content.concat(`sleep(${app.loopDelay}/1000.0)`, "\n");
+    content = content.concat(TAB, `sleep(${app.loopDelay}/1000.0)`, "\n");
   } else {
     statements.forEach((stmt) => {
-      content = "".concat(content, stmt, "\n");
+      content = content.concat(stmt, "\n");
     });
   }
   // Generate file
