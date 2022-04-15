@@ -31,20 +31,30 @@ export type AppService = {
 };
 
  */
+const TAB = "    "; // 4 spaces
+
 const getBaseFileContent = () => {
   return fs.readFileSync(`${__dirname}/base.py`, { encoding: "utf-8" });
 };
 
 const generateIfStatement = (condition, body) => {
-  return "if " + condition + ":\n\t" + body + "\n";
+  return "".concat("if ", condition, ":\n", TAB, body);
 };
 
-const generateServiceCall = (service) => {
-  return `requests.post(URL, json={'service': {'name': '${
-    service.name
-  }', 'thingID': '${service.thingID}', 'spaceID': '${
-    service.spaceID
-  }', 'input': '${service.input || ""}' }}).json()`;
+const generateServiceCall = (service, returnOutput = false) => {
+  if (returnOutput) {
+    return `requests.post(URL, json={'service': {'name': '${
+      service.name
+    }', 'thingID': '${service.thingID}', 'spaceID': '${
+      service.spaceID
+    }', 'input': '${service.input || ""}' }}).json()['output']`;
+  } else {
+    return `requests.post(URL, json={'service': {'name': '${
+      service.name
+    }', 'thingID': '${service.thingID}', 'spaceID': '${
+      service.spaceID
+    }', 'input': '${service.input || ""}' }})`;
+  }
 };
 
 // IF (A() is successful OR A() operator outputCompare) THEN (B)
@@ -52,10 +62,14 @@ const generateControlStatement = (
   serviceA,
   operator,
   outputCompare,
-  serviceB
+  serviceB,
+  continuous
 ) => {
-  const serviceACall = generateServiceCall(serviceA);
-  const serviceBCall = generateServiceCall(serviceB);
+  const serviceACall = generateServiceCall(serviceA, true);
+  let serviceBCall = generateServiceCall(serviceB);
+  if (continuous) {
+    serviceBCall = TAB + serviceBCall;
+  }
   if (operator && outputCompare) {
     const condition = `${serviceACall} ${operator} ${outputCompare}`;
     return generateIfStatement(condition, serviceBCall);
@@ -83,7 +97,7 @@ const generateServiceStatement = (service) => {
   return generateServiceCall(service);
 };
 
-const generateCodeFile = (app) => {
+const generateCodeFile = (app, outputDirectory = __dirname) => {
   // Iterate through AppComponents and generate statements
   let statements = [];
   app.components.forEach((component) => {
@@ -93,7 +107,8 @@ const generateCodeFile = (app) => {
         component.services[0],
         component.operator,
         component.outputCompare,
-        component.services[1]
+        component.services[1],
+        app.continuous
       );
     } else if (component.relationship === "drive") {
       statement = generateControlStatement(
@@ -108,9 +123,9 @@ const generateCodeFile = (app) => {
   // Generate content
   let content = getBaseFileContent() + "\n";
   if (app.continuous) {
-    content = content.concat("while True:", "\n    ");
+    content = content.concat("while True:", "\n", TAB);
     statements.forEach((stmt, index) => {
-      content = "".concat(content, stmt, "\n    ");
+      content = "".concat(content, stmt, "\n", TAB);
     });
     content = content.concat(`sleep(${app.loopDelay}/1000.0)`, "\n");
   } else {
@@ -120,9 +135,7 @@ const generateCodeFile = (app) => {
   }
   // Generate file
   try {
-    fs.writeFileSync(`${__dirname}/${app.id}.py`, content, {
-      flag: "w",
-    });
+    fs.writeFileSync(`${outputDirectory}/${app.id}.py`, content);
   } catch (error) {
     console.error(error);
   }
