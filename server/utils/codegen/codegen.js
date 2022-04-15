@@ -1,3 +1,4 @@
+const fs = require("fs");
 
 /**
  * App data format provided by frontend:
@@ -25,26 +26,38 @@ export type AppComponent = {
 export type AppService = {
   name: string;
   thingID: string;
+  spaceID: string;
   input?: string;
 };
 
  */
-const SERVICE_CALL_API_URL = "api_url";
+const getBaseFileContent = () => {
+  return fs.readFileSync(`${__dirname}/base.py`, { encoding: "utf-8" });
+};
 
 const generateWhileLoop = (condition, body) => {
-    return "while " + condition + ":\n\t" + body + "\n}" 
-}
+  return "while " + condition + ":\n\t" + body + "\n}";
+};
 
 const generateIfStatement = (condition, body) => {
-    return "if " + condition + ":\n\t" + body + "\n}" 
-}
+  return "if " + condition + ":\n\t" + body + "\n";
+};
 
-const generateServiceCall = async (service) => {
-  return `requests.post('url', data={'service': {'name': "service_name", 'thingID': "thing_id", 'spaceID': 'space_id', 'input': '' }}).json()`
-}
+const generateServiceCall = (service) => {
+  return `requests.post(URL, json={'service': {'name': '${
+    service.name
+  }', 'thingID': '${service.thingID}', 'spaceID': '${
+    service.spaceID
+  }', 'input': '${service.input || ""}' }}).json()`;
+};
 
 // IF (A() is successful OR A() operator outputCompare) THEN (B)
-const generateControlStatement = (serviceA, operator, outputCompare, serviceB) => {
+const generateControlStatement = (
+  serviceA,
+  operator,
+  outputCompare,
+  serviceB
+) => {
   const serviceACall = generateServiceCall(serviceA);
   const serviceBCall = generateServiceCall(serviceB);
   if (operator && outputCompare) {
@@ -53,7 +66,7 @@ const generateControlStatement = (serviceA, operator, outputCompare, serviceB) =
   } else {
     return generateIfStatement(serviceACall, serviceBCall);
   }
-}
+};
 
 // B(A())
 /**
@@ -67,28 +80,28 @@ const generateDriveStatement = (serviceA, serviceB) => {
   const serviceACall = generateServiceCall(serviceA);
   //use get to retrieve the output of serviceA
   //post (generateServiceCall) serviceB with the output of serviceA as the inputs
-}
+};
 
 // service()
 const generateServiceStatement = (service) => {
-
-}
+  return generateServiceCall(service);
+};
 
 const generateCodeFile = (app) => {
   // Iterate through AppComponents and generate statements
   let statements = [];
   app.components.forEach((component) => {
-    let statement = '';
-    if (component.relationship === 'control') {
+    let statement = "";
+    if (component.relationship === "control") {
       statement = generateControlStatement(
-        component.services[0], 
-        component.operator, 
-        component.outputCompare, 
+        component.services[0],
+        component.operator,
+        component.outputCompare,
         component.services[1]
       );
-    } else if (component.relationship === 'drive') {
+    } else if (component.relationship === "drive") {
       statement = generateControlStatement(
-        component.services[0], 
+        component.services[0],
         component.services[1]
       );
     } else {
@@ -96,12 +109,21 @@ const generateCodeFile = (app) => {
     }
     statements.push(statement);
   });
-  // Wrap everything in a single function call or while loop
-  
+  // Generate content
+  let content = getBaseFileContent() + "\n\n";
+  statements.forEach((stmt) => {
+    content = "".concat(content, stmt, "\n");
+  });
   // Generate file
-}
-
+  try {
+    fs.writeFileSync(`${__dirname}/${app.id}.py`, content, {
+      flag: "w",
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 module.exports = {
-  generateCodeFile
-}
+  generateCodeFile,
+};
