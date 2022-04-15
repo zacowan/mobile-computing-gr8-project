@@ -31,6 +31,5 @@ export const postApps: PostApps = async ({
     loopDelay,
     components,
   };
-  await axios.post(URL, data);
-  console.log("FINISHED POST");
+  return axios.post(URL, data);
 };

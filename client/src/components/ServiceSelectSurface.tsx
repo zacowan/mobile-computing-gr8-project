@@ -1,12 +1,12 @@
-import React, { FC, useContext, useState, useEffect } from "react";
+import React, { FC, useState, useEffect } from "react";
 
 import Button from "./Button";
-import DataContext from "../DataContext";
 import type { Service } from "../types/service";
 import type { AppService } from "../types/app";
 import { getSearchResults } from "../utils/search";
 import SearchBar from "./SearchBar";
 import TextInput from "./TextInput";
+import { useDiscoverQuery } from "../utils/queries";
 
 export type Props = {
   onSelect: (service: AppService) => void;
@@ -21,16 +21,16 @@ const ServiceSelectSurface: FC<Props> = ({
   title,
   serviceRequirement,
 }) => {
-  const { services } = useContext(DataContext);
+  const { data: discoverData } = useDiscoverQuery();
   const [filteredServices, setFilteredServices] = useState<Array<Service>>();
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
-    const filtered = getSearchResults(searchTerm, services, [
-      "name",
-      "thingID",
-      "keywords",
-    ]);
+    const filtered = getSearchResults(
+      searchTerm,
+      discoverData?.services || [],
+      ["name", "thingID", "keywords"]
+    );
     const secondFiltered = filtered.filter((val) => {
       if (serviceRequirement === "output") {
         return val.output !== "NULL";
@@ -41,7 +41,7 @@ const ServiceSelectSurface: FC<Props> = ({
       }
     });
     setFilteredServices(secondFiltered);
-  }, [services, searchTerm, serviceRequirement]);
+  }, [discoverData, searchTerm, serviceRequirement]);
 
   const handleSelect = (service: Service, input?: string) => {
     const appService: AppService = {
@@ -72,7 +72,7 @@ const ServiceSelectSurface: FC<Props> = ({
       <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
       {filteredServices && filteredServices.length === 0 && (
         <span className="block text-sm font-light text-slate-600">
-          {services.length === 0
+          {discoverData
             ? "Waiting for services to be declared in the smart space..."
             : `No services match the term ${searchTerm}.`}
         </span>

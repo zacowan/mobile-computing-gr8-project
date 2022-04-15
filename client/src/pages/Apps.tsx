@@ -1,24 +1,26 @@
-import React, { FC, useState, useContext, useEffect } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import type { App } from "../types/app";
-import DataContext from "../DataContext";
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
 import { getSearchResults } from "../utils/search";
 import AppCard from "../components/AppCard";
 import { PlusIcon } from "../assets/icons";
+import { useAppsQuery } from "../utils/queries";
 
 const AppsPage: FC = () => {
-  const { apps } = useContext(DataContext);
+  const { data: appsData } = useAppsQuery();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredApps, setFilteredApps] = useState<Array<App>>();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const filtered = getSearchResults(searchTerm, apps, ["name"]);
+    const filtered = getSearchResults(searchTerm, appsData?.apps || [], [
+      "name",
+    ]);
     setFilteredApps(filtered);
-  }, [apps, searchTerm]);
+  }, [appsData, searchTerm]);
 
   return (
     <div className="mt-20 w-full space-y-10">

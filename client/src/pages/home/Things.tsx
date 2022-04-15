@@ -1,24 +1,24 @@
-import React, { FC, useState, useEffect, useContext } from "react";
+import React, { FC, useState, useEffect } from "react";
 
 import SearchBar from "../../components/SearchBar";
 import ThingCard from "../../components/ThingCard";
 import type { Thing } from "../../types/thing";
-import DataContext from "../../DataContext";
 import { getSearchResults } from "../../utils/search";
+import { useDiscoverQuery } from "../../utils/queries";
 
 const ThingsPage: FC = () => {
-  const { things } = useContext(DataContext);
+  const { data: discoverData } = useDiscoverQuery();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredThings, setFilteredThings] = useState<Array<Thing>>();
 
   useEffect(() => {
-    const filtered = getSearchResults(searchTerm, things, [
+    const filtered = getSearchResults(searchTerm, discoverData?.things || [], [
       "name",
       "id",
       "description",
     ]);
     setFilteredThings(filtered);
-  }, [searchTerm, things]);
+  }, [searchTerm, discoverData]);
 
   return (
     <div className="w-full space-y-10">
@@ -26,7 +26,7 @@ const ThingsPage: FC = () => {
       <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
       {filteredThings && filteredThings.length === 0 && (
         <span className="block text-sm font-light text-slate-600">
-          {things.length === 0
+          {discoverData
             ? "Waiting for things to be declared in the smart space..."
             : `No things match the term ${searchTerm}.`}
         </span>

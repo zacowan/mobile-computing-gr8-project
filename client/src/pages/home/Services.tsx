@@ -1,24 +1,23 @@
-import React, { FC, useState, useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { FC, useState, useEffect } from "react";
 
 import SearchBar from "../../components/SearchBar";
-import DataContext from "../../DataContext";
 import type { Service } from "../../types/service";
 import { getSearchResults } from "../../utils/search";
+import { useDiscoverQuery } from "../../utils/queries";
 
 const ServicesPage: FC = () => {
-  const { services } = useContext(DataContext);
+  const { data: discoverData } = useDiscoverQuery();
   const [filteredServices, setFilteredServices] = useState<Array<Service>>();
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
-    const filtered = getSearchResults(searchTerm, services, [
-      "name",
-      "thingID",
-      "keywords",
-    ]);
+    const filtered = getSearchResults(
+      searchTerm,
+      discoverData?.services || [],
+      ["name", "thingID", "keywords"]
+    );
     setFilteredServices(filtered);
-  }, [services, searchTerm]);
+  }, [discoverData, searchTerm]);
 
   return (
     <div className="w-full space-y-10">
@@ -26,7 +25,7 @@ const ServicesPage: FC = () => {
       <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
       {filteredServices && filteredServices.length === 0 && (
         <span className="block text-sm font-light text-slate-600">
-          {services.length === 0
+          {discoverData
             ? "Waiting for services to be declared in the smart space..."
             : `No services match the term ${searchTerm}.`}
         </span>
@@ -39,9 +38,6 @@ const ServicesPage: FC = () => {
                 <th className="py-3 pl-5 font-medium">Name</th>
                 <th className="py-3 pr-5 font-medium">Thing ID</th>
                 <th className="py-3 pr-5 font-medium">Keywords</th>
-                {/* <th className="py-3 pr-5 font-medium">
-                <span className="sr-only">Details</span>
-              </th> */}
               </tr>
             </thead>
             <tbody className="text-slate-600">
@@ -53,9 +49,6 @@ const ServicesPage: FC = () => {
                   <td className="py-3 pl-5">{service.name}</td>
                   <td className="py-3 pr-5">{service.thingID}</td>
                   <td className="py-3 pr-5">{service.keywords}</td>
-                  {/* <td className="py-3 pr-5">
-                  <Link to="">Details</Link>
-                </td> */}
                 </tr>
               ))}
             </tbody>

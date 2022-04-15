@@ -3,34 +3,27 @@ import { useQuery, useMutation } from "react-query";
 
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
-import { WorkingDirData } from "../types/WorkingDirData";
-import { getWorkingDir, putWorkingDir } from "../utils/apiCalls/workingDir";
+import { useWorkingDirQuery, useMutateWorkingDir } from "../utils/queries";
 
 const SettingsPage: FC = () => {
   const [isEditingWorkingDir, setIsEditingWorkingDir] =
     useState<boolean>(false);
   const [workingDirInputValue, setWorkingDirInputValue] = useState<string>("");
-  const workingDirData = useQuery<WorkingDirData, Error>(
-    "workingDir",
-    getWorkingDir
-  );
-  const mutateWorkingDirData = useMutation<void, Error, string, void>(
-    "workingDir",
-    putWorkingDir,
-    {
-      onSettled: () => {
-        setIsEditingWorkingDir(false);
-      },
-      onError: () => {
-        setTimeout(handleResetError, 5000);
-      },
-    }
-  );
+  const { data: workingDirData } = useWorkingDirQuery();
+  const mutateWorkingDirData = useMutateWorkingDir({
+    onSettled: () => {
+      setIsEditingWorkingDir(false);
+      console.log("No longer editing");
+    },
+    onError: () => {
+      setTimeout(handleResetError, 5000);
+    },
+  });
 
   const handleResetError = () => mutateWorkingDirData.reset();
 
   const handleEditWorkingDir = () => {
-    setWorkingDirInputValue(workingDirData.data?.workingDir || "");
+    setWorkingDirInputValue(workingDirData?.workingDir || "");
     setIsEditingWorkingDir(true);
   };
 
@@ -45,7 +38,7 @@ const SettingsPage: FC = () => {
             value={
               isEditingWorkingDir
                 ? workingDirInputValue
-                : workingDirData.data?.workingDir
+                : workingDirData?.workingDir
             }
             placeholder="Working directory"
             disabled={isEditingWorkingDir === false}

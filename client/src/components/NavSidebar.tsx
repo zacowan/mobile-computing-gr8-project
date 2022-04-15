@@ -2,27 +2,8 @@ import React, { FC } from "react";
 
 import NavButton from "./NavButton";
 import { HomeIcon, TerminalIcon, CogIcon } from "../assets/icons";
-import { UseQueryResult } from "react-query";
-import { DiscoverData } from "../types/DiscoverData";
-import { AppData } from "../types/AppData";
 
-type Props = {
-  discoverQueryResult: UseQueryResult<DiscoverData, Error>;
-  appQueryResult: UseQueryResult<AppData, Error>;
-};
-
-const NavSidebar: FC<Props> = ({ discoverQueryResult, appQueryResult }) => {
-  const determineConnectedStatus = (qr: UseQueryResult) => {
-    if (discoverQueryResult.isFetching && !discoverQueryResult.isSuccess) {
-      return "Attempting connection...";
-    }
-    if (discoverQueryResult.isFetched && discoverQueryResult.isSuccess) {
-      return "Connected";
-    } else {
-      return "Not connected";
-    }
-  };
-
+const NavSidebar: FC = () => {
   return (
     <div className="h-screen max-w-xs px-10 py-20">
       {/* Title */}
@@ -49,7 +30,7 @@ const NavSidebar: FC<Props> = ({ discoverQueryResult, appQueryResult }) => {
         <span className="block text-center text-lg font-medium">
           API Status
         </span>
-        <div className="rounded bg-slate-100 px-5 py-3 text-sm font-light text-slate-600">
+        {/* <div className="rounded bg-slate-100 px-5 py-3 text-sm font-light text-slate-600">
           <span className="flex items-center font-normal text-slate-900">
             Things and Services
           </span>
@@ -76,7 +57,7 @@ const NavSidebar: FC<Props> = ({ discoverQueryResult, appQueryResult }) => {
           >
             {appQueryResult.error?.message || "No errors"}
           </span>
-        </div>
+        </div> */}
       </div>
     </div>
   );
