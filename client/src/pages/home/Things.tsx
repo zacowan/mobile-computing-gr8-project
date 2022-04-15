@@ -26,7 +26,7 @@ const ThingsPage: FC = () => {
       <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
       {filteredThings && filteredThings.length === 0 && (
         <span className="block text-sm font-light text-slate-600">
-          {discoverData
+          {!discoverData
             ? "Waiting for things to be declared in the smart space..."
             : `No things match the term ${searchTerm}.`}
         </span>

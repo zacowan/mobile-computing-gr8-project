@@ -3,14 +3,15 @@ import type { DiscoverData } from "../types/DiscoverData";
 import type { AppData } from "../types/AppData";
 import type { WorkingDirData } from "../types/WorkingDirData";
 import fetchDiscover from "./apiCalls/fetchDiscover";
-import { getApps } from "./apiCalls/apps";
+import { getApps, postApps } from "./apiCalls/apps";
 import { getStatus } from "./apiCalls/status";
 import { getWorkingDir, putWorkingDir } from "./apiCalls/workingDir";
+import type { App } from "../types/app";
 
 const DATA_FETCH_RATE_MS = 5000; // 5 seconds
 
 const DISCOVER_KEY = "discover";
-const APP_KEY = "app";
+const APPS_KEY = "app";
 const WORKING_DIR_KEY = "workingDir";
 const STATUS_KEY = "status";
 
@@ -29,12 +30,18 @@ export const useDiscoverQuery = () =>
   });
 
 export const useAppsQuery = () =>
-  useQuery<AppData, Error>(APP_KEY, getApps, {
+  useQuery<AppData, Error>(APPS_KEY, getApps, {
     initialData: {
       apps: [],
     },
-    refetchInterval: DATA_FETCH_RATE_MS,
   });
+
+export const useMutateApps = (
+  config?: Omit<
+    UseMutationOptions<void, Error, Partial<App>, void>,
+    "mutationFn" | "mutationKey"
+  >
+) => useMutation<void, Error, Partial<App>, void>(APPS_KEY, postApps, config);
 
 export const useWorkingDirQuery = () =>
   useQuery<WorkingDirData, Error>(WORKING_DIR_KEY, getWorkingDir);

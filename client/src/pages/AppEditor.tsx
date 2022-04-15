@@ -10,8 +10,14 @@ import TextInput from "../components/TextInput";
 import Select from "../components/Select";
 import ServiceSelectSurface from "../components/ServiceSelectSurface";
 import AppComponentCard from "../components/AppComponentCard";
+import { useMutateApps } from "../utils/queries";
 
 const AppEditorPage: FC = () => {
+  const { mutate: mutateApps, isLoading } = useMutateApps({
+    onSuccess: () => {
+      navigate("/apps");
+    },
+  });
   const [components, setComponents] = useState<AppComponent[]>([]);
   const [name, setName] = useState<string>("");
   const [appType, setAppType] = useState<string>("");
@@ -22,7 +28,12 @@ const AppEditorPage: FC = () => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    navigate("/apps");
+    mutateApps({
+      name,
+      continuous: appType === "Continuous",
+      loopDelay,
+      components,
+    });
   };
 
   const handleReset: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -53,6 +64,7 @@ const AppEditorPage: FC = () => {
     if (!name || !appType) return true;
     if (appType === "Continuous" && !loopDelay) return true;
     if (components.length <= 0) return true;
+    if (isLoading) return true;
 
     return false;
   };
