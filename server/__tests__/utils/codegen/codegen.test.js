@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { generateCodeFile } = require("../../../utils/codegen/codegen");
+const { generateCodeFile } = require("../../../utils/codegen");
 
 /**
  * Test helpers START
