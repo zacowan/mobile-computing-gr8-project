@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useQuery } from "react-query";
 // Components & Pages
 import HomePage from "./pages/home";
 import ThingsPage from "./pages/home/Things";

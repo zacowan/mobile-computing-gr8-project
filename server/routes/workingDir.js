@@ -20,6 +20,7 @@ router.put("/", async (req, res, next) => {
   var { workingDir } = req.body;
   // Set the WorkingDir in Redis
   await setData("workingDir", workingDir);
+  res.send();
 });
 
 /**

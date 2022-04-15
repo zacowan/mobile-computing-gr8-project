@@ -31,6 +31,7 @@ router.post("/", async (req, res, next) => {
   const oldApps = (await getData("apps")) || [];
   // Save new app in list of apps in redis
   await setData("apps", [...oldApps, appToSave]);
+  res.send();
 });
 
 router.get("/", async (req, res, next) => {
