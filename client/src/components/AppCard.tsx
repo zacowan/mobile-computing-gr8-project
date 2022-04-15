@@ -47,6 +47,15 @@ const AppCard: FC<Props> = ({
     setDeleteModalActive(false);
   };
 
+  const determineStatusText = () => {
+    if (app.active) return "Active now";
+
+    if (app.lastActive)
+      return `Last active: ${dayjs(new Date(app.lastActive)).fromNow()}`;
+
+    return "Successfully generated";
+  };
+
   return (
     <div className="space-y-2 rounded border border-slate-200 p-5 shadow-md transition-colors hover:bg-slate-100">
       {/* Confirm Dialog Modal */}
@@ -65,9 +74,7 @@ const AppCard: FC<Props> = ({
       {/* Info */}
       <h1 className="text-xl font-medium tracking-tight">{app.name}</h1>
       <h2 className="text-sm font-light text-slate-600">
-        {app.active
-          ? "Active now"
-          : `Last active: ${dayjs(new Date(app.lastActive)).fromNow()}`}
+        {determineStatusText()}
       </h2>
       {/* Buttons */}
       <div className="flex items-center space-x-3 pt-2">

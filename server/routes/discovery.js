@@ -39,6 +39,7 @@ const parseServiceTweet = (tweet) => {
     name: tweet["Name"],
     thingID: tweet["Thing ID"],
     entity: tweet["Entity ID"], // entity id
+    spaceID: tweet["Space ID"],
     type: tweet["Type"],
     inputs: inputs,
     output: output, // NULL or int
