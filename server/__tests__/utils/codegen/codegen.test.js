@@ -135,6 +135,19 @@ describe("codegen", () => {
       const compare = getFileContent(`${compareDir}/drive_relationship.py`);
       expect(generated).toEqual(compare);
     });
+
+    it("generates code for multiple components", () => {
+      app.addServiceComponent();
+      app.addDriveRelationship();
+      app.addControlRelationship();
+      app.addControlRelationship("==", "1");
+      // Generate code file
+      generateCodeFile(app.toObject(), __dirname);
+      // Compare against expected
+      const generated = getFileContent(`${app.id}.py`);
+      const compare = getFileContent(`${compareDir}/multiple_components.py`);
+      expect(generated).toEqual(compare);
+    });
   });
 
   describe("continuous apps", () => {
@@ -186,6 +199,19 @@ describe("codegen", () => {
       // Compare against expected
       const generated = getFileContent(`${app.id}.py`);
       const compare = getFileContent(`${compareDir}/drive_relationship.py`);
+      expect(generated).toEqual(compare);
+    });
+
+    it("generates code for multiple components", () => {
+      app.addServiceComponent();
+      app.addDriveRelationship();
+      app.addControlRelationship();
+      app.addControlRelationship("==", "1");
+      // Generate code file
+      generateCodeFile(app.toObject(), __dirname);
+      // Compare against expected
+      const generated = getFileContent(`${app.id}.py`);
+      const compare = getFileContent(`${compareDir}/multiple_components.py`);
       expect(generated).toEqual(compare);
     });
   });
