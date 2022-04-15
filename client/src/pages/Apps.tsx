@@ -11,7 +11,7 @@ import { PlusIcon } from "../assets/icons";
 
 const AppsPage: FC = () => {
   const { apps } = useContext(DataContext);
-  const [searchTerm, setSearchTerm] = useState<string>();
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredApps, setFilteredApps] = useState<Array<App>>();
   const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ const AppsPage: FC = () => {
           >
             Create App
           </Button>
-          <Button>Upload App</Button>
+          {/* <Button>Upload App</Button> */}
         </div>
       </div>
       {/* Apps */}

@@ -72,7 +72,7 @@ const AppCard: FC<Props> = ({
       {/* Buttons */}
       <div className="flex items-center space-x-3 pt-2">
         {/* Start/stop */}
-        {app.active ? (
+        {app.active && app.continuous === true ? (
           <button
             onClick={() => handleClickStartStop(onClickStop)}
             className="text-red-600 transition-colors hover:text-red-700 disabled:text-red-700 disabled:hover:cursor-not-allowed"
@@ -90,21 +90,21 @@ const AppCard: FC<Props> = ({
           </button>
         )}
         {/* Logs */}
+        <button
+          onClick={() => setLogsModalActive(true)}
+          className="text-slate-600 hover:text-slate-700"
+        >
+          <ReportIcon />
+        </button>
         {!app.active && (
           <>
-            <button
-              onClick={() => setLogsModalActive(true)}
-              className="text-slate-600 hover:text-slate-700"
-            >
-              <ReportIcon />
-            </button>
             {/* Edit */}
-            <button
+            {/* <button
               onClick={onClickEdit}
               className="text-slate-600 hover:text-slate-700"
             >
               <PencilIcon />
-            </button>
+            </button> */}
             {/* Delete */}
             <button
               onClick={() => setDeleteModalActive(true)}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useQuery } from "react-query";
 // Components & Pages
@@ -13,40 +13,31 @@ import NavSidebar from "./components/NavSidebar";
 import type { DiscoverData } from "./types/DiscoverData";
 import DataContext from "./DataContext";
 import MockApps from "./mock/apps";
+import MockServices from "./mock/services";
 import fetchDiscover from "./utils/apiCalls/fetchDiscover";
-
-const DATA_FETCH_RATE_MS = 5000; // 5 seconds
+import { DISCOVER_KEY, DATA_FETCH_RATE_MS } from "./utils/queryConstants";
 
 const App: React.FC = () => {
   const discoverData = useQuery<DiscoverData, Error>(
-    "discover",
+    DISCOVER_KEY,
     fetchDiscover,
     {
       initialData: {
         things: [],
         services: [],
       },
+      refetchInterval: DATA_FETCH_RATE_MS,
     }
   );
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      discoverData.refetch();
-    }, DATA_FETCH_RATE_MS);
-    return () => clearInterval(interval);
-  }, [discoverData]);
-
   return (
     <div className="flex divide-x-2">
-      <NavSidebar
-        isConnectedDiscover={discoverData.isFetched && discoverData.isSuccess}
-        errorMessageDiscover={discoverData.error?.message}
-      />
+      <NavSidebar discoverQueryResult={discoverData} />
       <div className="h-screen w-full overflow-x-auto px-10 py-20">
         <DataContext.Provider
           value={{
             things: discoverData.data!.things,
-            services: discoverData.data!.services,
+            services: MockServices,
             apps: MockApps,
           }}
         >
