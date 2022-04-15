@@ -35,10 +35,6 @@ const getBaseFileContent = () => {
   return fs.readFileSync(`${__dirname}/base.py`, { encoding: "utf-8" });
 };
 
-const generateWhileLoop = (condition, body) => {
-  return "while " + condition + ":\n\t" + body + "\n}";
-};
-
 const generateIfStatement = (condition, body) => {
   return "if " + condition + ":\n\t" + body + "\n";
 };
@@ -110,10 +106,18 @@ const generateCodeFile = (app) => {
     statements.push(statement);
   });
   // Generate content
-  let content = getBaseFileContent() + "\n\n";
-  statements.forEach((stmt) => {
-    content = "".concat(content, stmt, "\n");
-  });
+  let content = getBaseFileContent() + "\n";
+  if (app.continuous) {
+    content = content.concat("while True:", "\n    ");
+    statements.forEach((stmt, index) => {
+      content = "".concat(content, stmt, "\n    ");
+    });
+    content = content.concat(`sleep(${app.loopDelay}/1000.0)`, "\n");
+  } else {
+    statements.forEach((stmt) => {
+      content = "".concat(content, stmt, "\n");
+    });
+  }
   // Generate file
   try {
     fs.writeFileSync(`${__dirname}/${app.id}.py`, content, {

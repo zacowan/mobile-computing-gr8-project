@@ -11,6 +11,7 @@ const getFileContent = (fname) => {
 
 describe("codegen", () => {
   describe("single run apps", () => {
+    const compareDir = "testFiles/singleRun";
     let app = new TestApp();
 
     beforeEach(() => {
@@ -18,18 +19,18 @@ describe("codegen", () => {
     });
 
     it("generates code for a single service call", () => {
-      // Create app
       app.addServiceComponent();
       // Generate code file
       generateCodeFile(app.toObject());
       // Compare against expected
       const generated = getFileContent(`${app.id}.py`);
-      const compare = getFileContent(`testFiles/single_service_call.py`);
+      const compare = getFileContent(`${compareDir}/single_service_call.py`);
       expect(generated).toEqual(compare);
     });
   });
 
   describe("continuous apps", () => {
+    const compareDir = "testFiles/continuous";
     let app = new TestApp();
 
     beforeEach(() => {
@@ -39,7 +40,13 @@ describe("codegen", () => {
     });
 
     it("generates code for a single service call", () => {
-      expect(1).toEqual(1);
+      app.addServiceComponent();
+      // Generate code file
+      generateCodeFile(app.toObject());
+      // Compare against expected
+      const generated = getFileContent(`${app.id}.py`);
+      const compare = getFileContent(`${compareDir}/single_service_call.py`);
+      expect(generated).toEqual(compare);
     });
   });
 });
