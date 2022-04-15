@@ -16,5 +16,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", apiRouter);
+app.use("/status", (req, res) => {
+  res.send();
+});
 
 module.exports = app;

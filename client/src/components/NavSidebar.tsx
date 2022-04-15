@@ -2,8 +2,25 @@ import React, { FC } from "react";
 
 import NavButton from "./NavButton";
 import { HomeIcon, TerminalIcon, CogIcon } from "../assets/icons";
+import { useStatusQuery } from "../utils/queries";
 
 const NavSidebar: FC = () => {
+  const statusQuery = useStatusQuery();
+
+  const getConnectionStatusText = () => {
+    if (statusQuery.isSuccess) return "Connected";
+
+    if (statusQuery.isFetching) return "Attempting connection...";
+
+    return "Not connected";
+  };
+
+  const getErrorsText = () => {
+    if (!statusQuery.isError) return "No errors";
+
+    return statusQuery.error.message;
+  };
+
   return (
     <div className="h-screen max-w-xs px-10 py-20">
       {/* Title */}
@@ -30,34 +47,19 @@ const NavSidebar: FC = () => {
         <span className="block text-center text-lg font-medium">
           API Status
         </span>
-        {/* <div className="rounded bg-slate-100 px-5 py-3 text-sm font-light text-slate-600">
+        <div className="rounded bg-slate-100 px-5 py-3 text-sm font-light text-slate-600">
           <span className="flex items-center font-normal text-slate-900">
-            Things and Services
+            Server
           </span>
-          <span className="block">
-            {determineConnectedStatus(discoverQueryResult)}
-          </span>
+          <span className="block">{getConnectionStatusText()}</span>
           <span
             className={`block ${
-              discoverQueryResult.isError ? "text-red-600" : "text-green-600"
+              statusQuery.isError ? "text-red-600" : "text-green-600"
             }`}
           >
-            {discoverQueryResult.error?.message || "No errors"}
+            {getErrorsText()}
           </span>
-          <span className="flex items-center font-normal text-slate-900">
-            Apps
-          </span>
-          <span className="block">
-            {determineConnectedStatus(appQueryResult)}
-          </span>
-          <span
-            className={`block ${
-              appQueryResult.isError ? "text-red-600" : "text-green-600"
-            }`}
-          >
-            {appQueryResult.error?.message || "No errors"}
-          </span>
-        </div> */}
+        </div>
       </div>
     </div>
   );
