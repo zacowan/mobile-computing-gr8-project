@@ -44,8 +44,8 @@ client.on("message", async function (message, remote) {
   } else {
   }
 
-  console.log(tweets);
-  console.log(tweets.length);
+  // console.log(tweets);
+  // console.log(tweets.length);
   await setData("tweets", tweets);
 });
 

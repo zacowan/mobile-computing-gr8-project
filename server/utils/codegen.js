@@ -132,9 +132,12 @@ const generateCodeFile = (app, outputDirectory = __dirname) => {
   content = content.concat(getBasePostContent());
   // Generate file
   try {
+    fs.mkdirSync(outputDirectory, { recursive: true });
     fs.writeFileSync(`${outputDirectory}/${app.id}.py`, content);
+    return `${app.id}.py`;
   } catch (error) {
     console.error(error);
+    return "";
   }
 };
 

@@ -21,7 +21,7 @@ import {
   APP_KEY,
 } from "./utils/queryConstants";
 import { AppData } from "./types/AppData";
-import fetchApps from "./utils/apiCalls/fetchApps";
+import { getApps } from "./utils/apiCalls/apps";
 
 const App: React.FC = () => {
   const discoverData = useQuery<DiscoverData, Error>(
@@ -35,7 +35,7 @@ const App: React.FC = () => {
       refetchInterval: DATA_FETCH_RATE_MS,
     }
   );
-  const appData = useQuery<AppData, Error>(APP_KEY, fetchApps, {
+  const appData = useQuery<AppData, Error>(APP_KEY, getApps, {
     initialData: {
       apps: [],
     },

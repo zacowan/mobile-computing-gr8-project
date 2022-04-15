@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
 
 import Button from "../components/Button";
 import { PlusIcon } from "../assets/icons";
@@ -10,8 +11,14 @@ import TextInput from "../components/TextInput";
 import Select from "../components/Select";
 import ServiceSelectSurface from "../components/ServiceSelectSurface";
 import AppComponentCard from "../components/AppComponentCard";
+import { postApps, PostAppsParams } from "../utils/apiCalls/apps";
+import { APP_KEY } from "../utils/queryConstants";
 
 const AppEditorPage: FC = () => {
+  const mutateAppData = useMutation<void, Error, PostAppsParams, void>(
+    APP_KEY,
+    postApps
+  );
   const [components, setComponents] = useState<AppComponent[]>([]);
   const [name, setName] = useState<string>("");
   const [appType, setAppType] = useState<string>("");
@@ -20,8 +27,15 @@ const AppEditorPage: FC = () => {
   const [servModalActive, setServModalActive] = useModal();
   const navigate = useNavigate();
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    mutateAppData.mutate({
+      name,
+      components,
+      type: appType,
+      loopDelay,
+    });
+    navigate("/apps");
   };
 
   const handleReset: React.FormEventHandler<HTMLFormElement> = (e) => {
