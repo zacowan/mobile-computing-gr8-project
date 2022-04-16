@@ -1,10 +1,16 @@
 import React, { FC, useState } from "react";
+import { useQueryClient } from "react-query";
 
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
-import { useWorkingDirQuery, useUpdateWorkingDir } from "../utils/queries";
+import {
+  useWorkingDirQuery,
+  useUpdateWorkingDir,
+  WORKING_DIR_KEY,
+} from "../utils/queries";
 
 const SettingsPage: FC = () => {
+  const queryClient = useQueryClient();
   const [isEditingWorkingDir, setIsEditingWorkingDir] =
     useState<boolean>(false);
   const [workingDirInputValue, setWorkingDirInputValue] = useState<string>("");
@@ -12,7 +18,7 @@ const SettingsPage: FC = () => {
   const updateWorkingDir = useUpdateWorkingDir({
     onSettled: () => {
       setIsEditingWorkingDir(false);
-      console.log("No longer editing");
+      queryClient.invalidateQueries(WORKING_DIR_KEY);
     },
     onError: () => {
       setTimeout(handleResetError, 5000);
@@ -37,7 +43,7 @@ const SettingsPage: FC = () => {
             value={
               isEditingWorkingDir
                 ? workingDirInputValue
-                : workingDirData?.workingDir
+                : workingDirData?.workingDir || ""
             }
             placeholder="Working directory"
             disabled={isEditingWorkingDir === false}
@@ -56,8 +62,7 @@ const SettingsPage: FC = () => {
         </div>
         {updateWorkingDir.isError && (
           <span className="text-red-600">
-            Error changing app working directory:{" "}
-            {updateWorkingDir.error.message}
+            Error: {updateWorkingDir.error.message}
           </span>
         )}
       </div>

@@ -12,7 +12,7 @@ const DATA_FETCH_RATE_MS = 5000; // 5 seconds
 
 const DISCOVER_KEY = "discover";
 export const APPS_KEY = "app";
-const WORKING_DIR_KEY = "workingDir";
+export const WORKING_DIR_KEY = "workingDir";
 const STATUS_KEY = "status";
 
 export const useStatusQuery = () =>
