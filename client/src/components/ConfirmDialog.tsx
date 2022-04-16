@@ -21,7 +21,7 @@ const ConfirmDialog: FC<Props> = ({
   return (
     <div className="z-20 max-w-prose space-y-5 rounded bg-white p-10 shadow-md">
       <h1 className="text-lg font-medium">{title}</h1>
-      <p className="text-xs font-light text-slate-600">{description}</p>
+      <p className="text-sm font-light text-slate-600">{description}</p>
       <div className="flex space-x-5">
         <Button disabled={confirmDisabled} primary onClick={onConfirm}>
           Confirm

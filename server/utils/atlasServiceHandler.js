@@ -1,4 +1,4 @@
-const net = require('net');
+const net = require("net");
 /*
 HOST_IP = "192.168.0.111"
 PORT = 6668
@@ -8,32 +8,38 @@ SHORT_SLEEP = 0.1
 LONG_SLEEP = 5
 */
 
-const sendTweet = (hostIP, port, thingID, smartSpaceID, serviceName, serviceInputs) => {
-    tweet = {
-        "Tweet Type": "Service call",
-        "Thing ID": thingID,
-        "Space ID": smartSpaceID,
-        "Service Name": serviceName,
-        "Service Inputs": serviceInputs
-    }
+const sendTweet = (
+  hostIP,
+  port,
+  thingID,
+  smartSpaceID,
+  serviceName,
+  serviceInputs
+) => {
+  const tweet = {
+    "Tweet Type": "Service call",
+    "Thing ID": thingID,
+    "Space ID": smartSpaceID,
+    "Service Name": serviceName,
+    "Service Inputs": serviceInputs,
+  };
+  const tweetJSON = JSON.stringify(tweet);
 
-    const client = new net.Socket();
-    client.connect({port: port, host: hostIP}, () => {
-        console.log("Client connection established with " + hostIP);
-        console.log("Sending tweet: " + tweet);
-        client.write(tweet);
-    });
+  const client = new net.Socket({});
+  client.connect({ port: port, host: hostIP }, () => {
+    console.log("Client connection established with " + hostIP);
+    console.log("Sending tweet: " + tweetJSON);
+    client.write(tweetJSON);
+  });
 
-    client.on('data', (chunk) => {
-        console.log("Data received from server: " + chunk);
-        client.end();
-    });
-}
+  client.on("data", (chunk) => {
+    console.log("Data received from server: " + chunk);
+    client.end();
+  });
+};
 
-const receiveTweet = () => {
-
-}
+const receiveTweet = () => {};
 
 module.exports = {
-    sendTweet
-}
+  sendTweet,
+};

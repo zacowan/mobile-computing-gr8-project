@@ -4,9 +4,6 @@ var { setData, getData } = require("../utils/redis");
 var { sendTweet } = require("../utils/atlasServiceHandler");
 var axios = require("axios");
 
-/**
- * GET (Returns the current Working Directory to the Front-End)
- */
 router.post("/", async (req, res, next) => {
   // Get Service Details from Body
   /*
@@ -17,30 +14,34 @@ router.post("/", async (req, res, next) => {
         "input": singleInput
       }
     */
-  var { service } = req.body;
-  console.log(service);
+  const { service } = req.body;
 
-  var {
+  const {
     data: { things },
   } = await axios.get("http://localhost:3001/discover");
-  console.log(things);
-  var currentThing = things.filter((thing) => {
-    return thing.smartSpaceID == service.spaceID && thing.id == service.thingID;
-  })[0];
 
-  console.log(currentThing);
+  const thingIndex = things.findIndex((thing) => {
+    return thing.spaceID === service.spaceID && thing.id === service.thingID;
+  });
 
-  sendTweet(
-    currentThing.ip,
-    currentThing.port,
-    currentThing.id,
-    currentThing.smartSpaceID,
-    service.serviceName,
-    service.input
-  );
+  if (thingIndex !== -1) {
+    const thing = things[thingIndex];
 
-  // Return success
-  res.send({ status: "success" });
+    sendTweet(
+      thing.ip,
+      thing.port,
+      thing.id,
+      thing.spaceID,
+      service.name,
+      service.input
+    );
+
+    // Return success
+    res.send({ status: "success" });
+  } else {
+    // Return failed
+    res.send({ status: "fail" });
+  }
 });
 
 module.exports = router;
