@@ -45,4 +45,5 @@ const generateServiceCallLogMessage = (
 module.exports = {
   createLog,
   generateServiceCallLogMessage,
+  generateAppErrorLogMessage,
 };
