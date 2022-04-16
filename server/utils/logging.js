@@ -18,6 +18,14 @@ const createLog = async (appID, message) => {
   }
 };
 
+const generateStartStopLogMessage = (start) => {
+  if (start) {
+    return `[App Start]: app was started.`;
+  } else {
+    return `[App Stop]: app was stopped.`;
+  }
+};
+
 const generateAppErrorLogMessage = (errorMessage) => {
   return `[App Error]: ${errorMessage}`;
 };
@@ -46,4 +54,5 @@ module.exports = {
   createLog,
   generateServiceCallLogMessage,
   generateAppErrorLogMessage,
+  generateStartStopLogMessage,
 };
