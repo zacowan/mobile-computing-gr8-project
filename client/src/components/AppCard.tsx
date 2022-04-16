@@ -1,4 +1,5 @@
 import React, { FC, useState } from "react";
+import { useQueryClient } from "react-query";
 
 import type { App } from "../types/app";
 import {
@@ -12,13 +13,13 @@ import ConfirmDialog from "./ConfirmDialog";
 import Modal, { useModal } from "../components/Modal";
 import dayjs from "dayjs";
 import LogsSurface from "./LogsSurface";
+import { APPS_KEY, useDeleteApp } from "../utils/queries";
 
 type Props = {
   app: App;
   onClickStart: () => Promise<void>;
   onClickStop: () => Promise<void>;
   onClickEdit: () => Promise<void>;
-  onClickDelete: () => Promise<void>;
 };
 
 const AppCard: FC<Props> = ({
@@ -26,8 +27,11 @@ const AppCard: FC<Props> = ({
   onClickStart,
   onClickStop,
   onClickEdit,
-  onClickDelete,
 }) => {
+  const queryClient = useQueryClient();
+  const { mutate: deleteApp, isLoading: isDeleting } = useDeleteApp({
+    onSuccess: () => queryClient.invalidateQueries(APPS_KEY),
+  });
   const [startStopDisabled, setStartStopDisabled] = useState<boolean>(false);
   const [deleteModalActive, setDeleteModalActive] = useModal();
   const [logsModalActive, setLogsModalActive] = useModal();
@@ -42,11 +46,6 @@ const AppCard: FC<Props> = ({
     }
   };
 
-  const handleDelete = async () => {
-    await onClickDelete();
-    setDeleteModalActive(false);
-  };
-
   const determineStatusText = () => {
     if (app.active) return "Active now";
 
@@ -54,6 +53,11 @@ const AppCard: FC<Props> = ({
       return `Last active: ${dayjs(new Date(app.lastActive)).fromNow()}`;
 
     return "Successfully generated";
+  };
+
+  const handleDelete = () => {
+    deleteApp(app.id);
+    setDeleteModalActive(false);
   };
 
   return (
@@ -65,6 +69,7 @@ const AppCard: FC<Props> = ({
           description="Are you sure you want to delete this app?"
           onConfirm={handleDelete}
           onCancel={() => setDeleteModalActive(false)}
+          confirmDisabled={isDeleting}
         />
       </Modal>
       {/* Logs Surface Modal */}

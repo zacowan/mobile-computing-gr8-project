@@ -10,10 +10,10 @@ import TextInput from "../components/TextInput";
 import Select from "../components/Select";
 import ServiceSelectSurface from "../components/ServiceSelectSurface";
 import AppComponentCard from "../components/AppComponentCard";
-import { useMutateApps } from "../utils/queries";
+import { useAddApp } from "../utils/queries";
 
 const AppEditorPage: FC = () => {
-  const { mutate: mutateApps, isLoading } = useMutateApps({
+  const { mutate: addApp, isLoading } = useAddApp({
     onSuccess: () => {
       navigate("/apps");
     },
@@ -28,7 +28,7 @@ const AppEditorPage: FC = () => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    mutateApps({
+    addApp({
       name,
       continuous: appType === "Continuous",
       loopDelay,

@@ -2,14 +2,14 @@ import React, { FC, useState } from "react";
 
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
-import { useWorkingDirQuery, useMutateWorkingDir } from "../utils/queries";
+import { useWorkingDirQuery, useUpdateWorkingDir } from "../utils/queries";
 
 const SettingsPage: FC = () => {
   const [isEditingWorkingDir, setIsEditingWorkingDir] =
     useState<boolean>(false);
   const [workingDirInputValue, setWorkingDirInputValue] = useState<string>("");
   const { data: workingDirData } = useWorkingDirQuery();
-  const mutateWorkingDirData = useMutateWorkingDir({
+  const updateWorkingDir = useUpdateWorkingDir({
     onSettled: () => {
       setIsEditingWorkingDir(false);
       console.log("No longer editing");
@@ -19,7 +19,7 @@ const SettingsPage: FC = () => {
     },
   });
 
-  const handleResetError = () => mutateWorkingDirData.reset();
+  const handleResetError = () => updateWorkingDir.reset();
 
   const handleEditWorkingDir = () => {
     setWorkingDirInputValue(workingDirData?.workingDir || "");
@@ -44,8 +44,8 @@ const SettingsPage: FC = () => {
           />
           {isEditingWorkingDir ? (
             <Button
-              disabled={mutateWorkingDirData.isLoading}
-              onClick={() => mutateWorkingDirData.mutate(workingDirInputValue)}
+              disabled={updateWorkingDir.isLoading}
+              onClick={() => updateWorkingDir.mutate(workingDirInputValue)}
               primary
             >
               Save
@@ -54,10 +54,10 @@ const SettingsPage: FC = () => {
             <Button onClick={handleEditWorkingDir}>Edit</Button>
           )}
         </div>
-        {mutateWorkingDirData.isError && (
+        {updateWorkingDir.isError && (
           <span className="text-red-600">
             Error changing app working directory:{" "}
-            {mutateWorkingDirData.error.message}
+            {updateWorkingDir.error.message}
           </span>
         )}
       </div>

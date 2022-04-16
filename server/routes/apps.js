@@ -4,7 +4,7 @@ var { setData, getData } = require("../utils/redis");
 var { v4: uuidv4 } = require("uuid");
 var fs = require("fs");
 const { generateCodeFile } = require("../utils/codegen");
-const getAtlasWorkingDir = require("../utils/workingDir");
+const { SLASH, getAtlasWorkingDir } = require("../utils/workingDir");
 
 router.post("/", async (req, res, next) => {
   // Get App Sent from Front-end in Request Body
@@ -46,6 +46,34 @@ router.get("/", async (req, res, next) => {
   });
   // Return the apps
   res.send({ apps: filteredApps });
+});
+
+router.delete("/", async (req, res) => {
+  const { id } = req.query;
+  const apps = (await getData("apps")) || [];
+
+  // Delete from file system
+  apps.every((app) => {
+    if (app.id !== id) return true;
+
+    // Delete
+    const filename = "".concat(app.workingDir, SLASH, app.file);
+    try {
+      fs.unlinkSync(filename);
+    } catch (error) {
+      // File likely doesn't exist
+      console.error(error);
+    }
+
+    return false;
+  });
+  // Delete from redis
+  const filteredApps = apps.filter((app) => {
+    return app.id !== id;
+  });
+  await setData("apps", filteredApps);
+
+  res.send();
 });
 
 /*

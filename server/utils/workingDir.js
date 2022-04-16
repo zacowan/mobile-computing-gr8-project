@@ -16,4 +16,7 @@ const getAtlasWorkingDir = async () => {
   return (await getData("workingDir")) || DEFAULT_WORKING_DIR;
 };
 
-module.exports = getAtlasWorkingDir;
+module.exports = {
+  getAtlasWorkingDir,
+  SLASH,
+};

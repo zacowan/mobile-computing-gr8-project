@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var { setData, getData } = require("../utils/redis");
-const getAtlasWorkingDir = require("../utils/workingDir");
+const { getAtlasWorkingDir } = require("../utils/workingDir");
 
 /**
  * GET (Returns the current Working Directory to the Front-End)
@@ -18,6 +18,7 @@ router.get("/", async (req, res, next) => {
 router.put("/", async (req, res, next) => {
   // Get the new Working Directory from the Request Body
   var { workingDir } = req.body;
+  // TODO: Validate the working directory
   // Set the WorkingDir in Redis
   await setData("workingDir", workingDir);
   res.send();

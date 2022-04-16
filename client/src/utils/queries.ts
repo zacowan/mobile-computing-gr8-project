@@ -3,7 +3,7 @@ import type { DiscoverData } from "../types/DiscoverData";
 import type { AppData } from "../types/AppData";
 import type { WorkingDirData } from "../types/WorkingDirData";
 import fetchDiscover from "./apiCalls/fetchDiscover";
-import { getApps, postApps } from "./apiCalls/apps";
+import { deleteApps, getApps, postApps } from "./apiCalls/apps";
 import { getStatus } from "./apiCalls/status";
 import { getWorkingDir, putWorkingDir } from "./apiCalls/workingDir";
 import type { App } from "../types/app";
@@ -11,7 +11,7 @@ import type { App } from "../types/app";
 const DATA_FETCH_RATE_MS = 5000; // 5 seconds
 
 const DISCOVER_KEY = "discover";
-const APPS_KEY = "app";
+export const APPS_KEY = "app";
 const WORKING_DIR_KEY = "workingDir";
 const STATUS_KEY = "status";
 
@@ -36,17 +36,24 @@ export const useAppsQuery = () =>
     },
   });
 
-export const useMutateApps = (
+export const useAddApp = (
   config?: Omit<
     UseMutationOptions<void, Error, Partial<App>, void>,
     "mutationFn" | "mutationKey"
   >
 ) => useMutation<void, Error, Partial<App>, void>(APPS_KEY, postApps, config);
 
+export const useDeleteApp = (
+  config?: Omit<
+    UseMutationOptions<void, Error, string, void>,
+    "mutationFn" | "mutationKey"
+  >
+) => useMutation<void, Error, string, void>(APPS_KEY, deleteApps, config);
+
 export const useWorkingDirQuery = () =>
   useQuery<WorkingDirData, Error>(WORKING_DIR_KEY, getWorkingDir);
 
-export const useMutateWorkingDir = (
+export const useUpdateWorkingDir = (
   config?: Omit<
     UseMutationOptions<void, Error, string, void>,
     "mutationFn" | "mutationKey"

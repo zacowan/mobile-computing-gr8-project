@@ -15,3 +15,9 @@ export const postApps: MutateFunction<void, Error, Partial<App>, void> = async (
 ) => {
   await axios.post(URL, app);
 };
+
+export const deleteApps: MutateFunction<void, Error, string, void> = async (
+  id
+) => {
+  await axios.delete(URL.concat("?id=", id));
+};
