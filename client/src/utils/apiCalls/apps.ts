@@ -21,3 +21,12 @@ export const deleteApps: MutateFunction<void, Error, string, void> = async (
 ) => {
   await axios.delete(URL.concat("?id=", id));
 };
+
+export const patchApps: MutateFunction<
+  void,
+  Error,
+  Partial<App>,
+  void
+> = async (app) => {
+  await axios.patch(URL.concat("?id=", app.id!), app);
+};

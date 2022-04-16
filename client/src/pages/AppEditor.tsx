@@ -1,23 +1,30 @@
-import React, { FC, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { FC, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import Button from "../components/Button";
 import { PlusIcon } from "../assets/icons";
 import Modal, { useModal } from "../components/Modal";
 import RelationshipSelectSurface from "../components/RelationshipSelectSurface";
-import type { AppComponent, AppService } from "../types/app";
+import type { App, AppComponent, AppService } from "../types/app";
 import TextInput from "../components/TextInput";
 import Select from "../components/Select";
 import ServiceSelectSurface from "../components/ServiceSelectSurface";
 import AppComponentCard from "../components/AppComponentCard";
-import { useAddApp } from "../utils/queries";
+import { useAddApp, useAppsQuery, useUpdateApp } from "../utils/queries";
 
 const AppEditorPage: FC = () => {
-  const { mutate: addApp, isLoading } = useAddApp({
+  const [searchParams] = useSearchParams();
+  const { mutate: addApp, isLoading: isAdding } = useAddApp({
     onSuccess: () => {
       navigate("/apps");
     },
   });
+  const { mutate: updateApp, isLoading: isUpdating } = useUpdateApp({
+    onSuccess: () => {
+      navigate("/apps");
+    },
+  });
+  const { data: appsData } = useAppsQuery();
   const [components, setComponents] = useState<AppComponent[]>([]);
   const [name, setName] = useState<string>("");
   const [appType, setAppType] = useState<string>("");
@@ -26,14 +33,33 @@ const AppEditorPage: FC = () => {
   const [servModalActive, setServModalActive] = useModal();
   const navigate = useNavigate();
 
+  const appIDToEdit = searchParams.get("appID");
+
+  useEffect(() => {
+    if (appIDToEdit && appsData?.apps) {
+      const index = appsData.apps.findIndex((app) => app.id === appIDToEdit);
+      const appToEdit = appsData.apps[index];
+
+      setName(appToEdit.name);
+      setAppType(appToEdit.continuous ? "Continuous" : "Single Use");
+      setLoopDelay(appToEdit.loopDelay);
+      setComponents(appToEdit.components);
+    }
+  }, [appIDToEdit, appsData]);
+
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    addApp({
+    const partialAppData: Partial<App> = {
       name,
       continuous: appType === "Continuous",
       loopDelay,
       components,
-    });
+    };
+    if (appIDToEdit) {
+      updateApp({ ...partialAppData, id: appIDToEdit });
+    } else {
+      addApp(partialAppData);
+    }
   };
 
   const handleReset: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -64,7 +90,7 @@ const AppEditorPage: FC = () => {
     if (!name || !appType) return true;
     if (appType === "Continuous" && !loopDelay) return true;
     if (components.length <= 0) return true;
-    if (isLoading) return true;
+    if (isAdding || isUpdating) return true;
 
     return false;
   };
@@ -86,7 +112,9 @@ const AppEditorPage: FC = () => {
           onClose={() => setServModalActive(false)}
         />
       </Modal>
-      <h1 className="text-6xl">New App</h1>
+      <h1 className="text-6xl">
+        {appIDToEdit === undefined ? "New App" : "Edit App"}
+      </h1>
       <form
         className="space-y-10"
         onSubmit={handleSubmit}

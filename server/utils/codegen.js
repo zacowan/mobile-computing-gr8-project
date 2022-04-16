@@ -1,36 +1,5 @@
 const fs = require("fs");
 
-/**
- * App data format provided by frontend:
- *
- *
- * export type App = {
-  name: string;
-  continuous: boolean;
-  loopDelay?: number; // time to wait between loop calls, in ms
-  components: Array<AppComponent>;
-};
-
-A, B
-
-if (A [operator] [outputCompare]) then B
-if (get_led() == 1) then set_mode(2)
-
-export type AppComponent = {
-  relationship?: string; // can be a relationship, or not
-  operator?: string; // used for if-then relationship
-  outputCompare?: string; // used for if-then relationship; if $output $operator $outputCompare is true, then run the next service
-  services: Array<AppService>; // can be 1 service, or 2 services in the context of a relationship
-};
-
-export type AppService = {
-  name: string;
-  thingID: string;
-  spaceID: string;
-  input?: string;
-};
-
- */
 const TAB = "    "; // 4 spaces
 
 const getBasePreContent = (appID) => {

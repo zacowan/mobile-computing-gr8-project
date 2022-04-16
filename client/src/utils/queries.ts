@@ -3,7 +3,7 @@ import type { DiscoverData } from "../types/DiscoverData";
 import type { AppData } from "../types/AppData";
 import type { WorkingDirData } from "../types/WorkingDirData";
 import fetchDiscover from "./apiCalls/fetchDiscover";
-import { deleteApps, getApps, postApps } from "./apiCalls/apps";
+import { deleteApps, getApps, patchApps, postApps } from "./apiCalls/apps";
 import { getStatus } from "./apiCalls/status";
 import { getWorkingDir, putWorkingDir } from "./apiCalls/workingDir";
 import type { App } from "../types/app";
@@ -42,6 +42,13 @@ export const useAddApp = (
     "mutationFn" | "mutationKey"
   >
 ) => useMutation<void, Error, Partial<App>, void>(APPS_KEY, postApps, config);
+
+export const useUpdateApp = (
+  config?: Omit<
+    UseMutationOptions<void, Error, Partial<App>, void>,
+    "mutationFn" | "mutationKey"
+  >
+) => useMutation<void, Error, Partial<App>, void>(APPS_KEY, patchApps, config);
 
 export const useDeleteApp = (
   config?: Omit<

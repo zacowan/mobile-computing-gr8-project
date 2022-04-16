@@ -34,6 +34,31 @@ router.post("/", async (req, res, next) => {
   res.send();
 });
 
+router.patch("/", async (req, res) => {
+  const { name, continuous, loopDelay, components } = req.body;
+  const { id: appID } = req.query;
+
+  // Find the app
+  let apps = (await getData("apps")) || [];
+  const index = apps.findIndex((app) => app.id === appID);
+  if (index !== -1) {
+    // Update the app
+    apps[index].name = name;
+    apps[index].continuous = continuous;
+    apps[index].loopDelay = loopDelay;
+    apps[index].components = components;
+    await setData("apps", apps);
+    // Get the current working directory from Redis
+    const workingDir = await getAtlasWorkingDir();
+    // Update the app file
+    generateCodeFile({ ...apps[index], id: appID }, workingDir);
+    // Return success
+    res.send();
+  } else {
+    res.status(404).send();
+  }
+});
+
 router.get("/", async (req, res, next) => {
   // Get the current working directory from Redis
   const workingDir = await getAtlasWorkingDir();

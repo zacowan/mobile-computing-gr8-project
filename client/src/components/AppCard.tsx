@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 import type { App } from "../types/app";
 import {
@@ -19,15 +20,10 @@ type Props = {
   app: App;
   onClickStart: () => Promise<void>;
   onClickStop: () => Promise<void>;
-  onClickEdit: () => Promise<void>;
 };
 
-const AppCard: FC<Props> = ({
-  app,
-  onClickStart,
-  onClickStop,
-  onClickEdit,
-}) => {
+const AppCard: FC<Props> = ({ app, onClickStart, onClickStop }) => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { mutate: deleteApp, isLoading: isDeleting } = useDeleteApp({
     onSuccess: () => queryClient.invalidateQueries(APPS_KEY),
@@ -111,12 +107,12 @@ const AppCard: FC<Props> = ({
         {!app.active && (
           <>
             {/* Edit */}
-            {/* <button
-              onClick={onClickEdit}
+            <button
+              onClick={() => navigate(`editor?appID=${app.id}`)}
               className="text-slate-600 hover:text-slate-700"
             >
               <PencilIcon />
-            </button> */}
+            </button>
             {/* Delete */}
             <button
               onClick={() => setDeleteModalActive(true)}
