@@ -34,6 +34,7 @@ export const useAppsQuery = () =>
     initialData: {
       apps: [],
     },
+    refetchInterval: DATA_FETCH_RATE_MS,
   });
 
 export const useAddApp = (

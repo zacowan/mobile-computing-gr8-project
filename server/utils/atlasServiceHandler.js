@@ -1,14 +1,6 @@
 const net = require("net");
-/*
-HOST_IP = "192.168.0.111"
-PORT = 6668
-THING_ID = "StrawberryThing01"
-SPACE_ID = "StrawberrySmartSpace"
-SHORT_SLEEP = 0.1
-LONG_SLEEP = 5
-*/
 
-const sendTweet = (
+const sendTweet = async (
   hostIP,
   port,
   thingID,
@@ -16,6 +8,7 @@ const sendTweet = (
   serviceName,
   serviceInputs
 ) => {
+  // Generate tweet
   const tweet = {
     "Tweet Type": "Service call",
     "Thing ID": thingID,
@@ -24,21 +17,27 @@ const sendTweet = (
     "Service Inputs": serviceInputs,
   };
   const tweetJSON = JSON.stringify(tweet);
-
-  const client = new net.Socket({});
-  client.connect({ port: port, host: hostIP }, () => {
-    console.log("Client connection established with " + hostIP);
-    console.log("Sending tweet: " + tweetJSON);
-    client.write(tweetJSON);
+  // Connect to thing
+  let receivedData = undefined;
+  const client = new net.Socket();
+  await client.connect({ port: port, host: hostIP });
+  // Update data when received
+  client.once("data", (chunk) => {
+    receivedData = chunk.toString();
   });
-
-  client.on("data", (chunk) => {
-    console.log("Data received from server: " + chunk);
-    client.end();
-  });
+  // Send tweet to thing
+  client.write(tweetJSON);
+  // Wait for response from thing
+  while (receivedData === undefined) {
+    await new Promise((resolve) => {
+      setTimeout(resolve, 250);
+    });
+  }
+  // End connection with thing
+  client.end();
+  // Return response
+  return JSON.parse(receivedData);
 };
-
-const receiveTweet = () => {};
 
 module.exports = {
   sendTweet,

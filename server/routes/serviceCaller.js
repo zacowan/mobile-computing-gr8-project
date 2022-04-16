@@ -6,14 +6,6 @@ var axios = require("axios");
 
 router.post("/", async (req, res, next) => {
   // Get Service Details from Body
-  /*
-    * service: {
-        "name": name,
-        "thingID": thingID,
-        "spaceID": smartSpaceID,
-        "input": singleInput
-      }
-    */
   const { service } = req.body;
 
   const {
@@ -27,7 +19,8 @@ router.post("/", async (req, res, next) => {
   if (thingIndex !== -1) {
     const thing = things[thingIndex];
 
-    sendTweet(
+    // Send tweet, get response
+    const tweetResponse = await sendTweet(
       thing.ip,
       thing.port,
       thing.id,
@@ -35,12 +28,23 @@ router.post("/", async (req, res, next) => {
       service.name,
       service.input
     );
+    // Determine the service call output
+    const serviceResult = tweetResponse["Service Result"];
+    const serviceStatus = tweetResponse["Status"];
 
-    // Return success
-    res.send({ status: "success" });
+    if (serviceResult === "No Output" && serviceStatus === "Successful") {
+      // Service with no output evaluated successfully
+      res.send({ output: true });
+    } else if (serviceStatus === "Successful") {
+      // Service with output evaluated successfully
+      res.send({ output: serviceResult });
+    } else {
+      // Service evaluated unsuccessfully
+      res.send({ output: null });
+    }
   } else {
     // Return failed
-    res.send({ status: "fail" });
+    res.send({ output: null });
   }
 });
 
