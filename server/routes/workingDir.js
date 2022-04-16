@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
-var { setData, getData } = require("../utils/redis");
-const { getAtlasWorkingDir } = require("../utils/workingDir");
+var { setData } = require("../utils/redis");
+const { getAtlasWorkingDir, SLASH } = require("../utils/workingDir");
 const fs = require("fs");
 
 /**
@@ -18,7 +18,11 @@ router.get("/", async (req, res, next) => {
  */
 router.put("/", async (req, res, next) => {
   // Get the new Working Directory from the Request Body
-  var { workingDir } = req.body;
+  let { workingDir } = req.body;
+  // Remove any trailing slashes
+  while (workingDir.endsWith(SLASH)) {
+    workingDir = workingDir.substring(0, workingDir.length - 1);
+  }
   // Validate the working directory
   try {
     fs.accessSync(workingDir);
