@@ -5,6 +5,7 @@ var { v4: uuidv4 } = require("uuid");
 var fs = require("fs");
 const { generateCodeFile } = require("../utils/codegen");
 const { SLASH, getAtlasWorkingDir } = require("../utils/workingDir");
+const { createLog, generateAppErrorLogMessage } = require("../utils/logging");
 
 router.post("/", async (req, res, next) => {
   // Get App Sent from Front-end in Request Body
@@ -97,6 +98,17 @@ router.delete("/", async (req, res) => {
     return app.id !== id;
   });
   await setData("apps", filteredApps);
+
+  res.send();
+});
+
+router.post("/logError", async (req, res) => {
+  const { appID } = req.query;
+  const { message: errorMessage } = req.body;
+
+  const logMessage = generateAppErrorLogMessage(errorMessage);
+
+  await createLog(appID, logMessage);
 
   res.send();
 });

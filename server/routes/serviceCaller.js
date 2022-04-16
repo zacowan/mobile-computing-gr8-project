@@ -3,9 +3,14 @@ var router = express.Router();
 var { setData, getData } = require("../utils/redis");
 var { sendTweet } = require("../utils/atlasServiceHandler");
 var axios = require("axios");
+const {
+  createLog,
+  generateServiceCallLogMessage,
+} = require("../utils/logging");
 
 router.post("/", async (req, res, next) => {
   // Get Service Details from Body
+  const { appID } = req.query;
   const { service } = req.body;
 
   const {
@@ -32,6 +37,15 @@ router.post("/", async (req, res, next) => {
     const serviceResult = tweetResponse["Service Result"];
     const serviceStatus = tweetResponse["Status"];
 
+    const logMessage = generateServiceCallLogMessage(
+      serviceResult,
+      serviceStatus,
+      thing.id,
+      thing.spaceID,
+      service.name,
+      service.input
+    );
+
     if (serviceResult === "No Output" && serviceStatus === "Successful") {
       // Service with no output evaluated successfully
       res.send({ output: true });
@@ -42,6 +56,8 @@ router.post("/", async (req, res, next) => {
       // Service evaluated unsuccessfully
       res.send({ output: null });
     }
+
+    await createLog(appID, logMessage);
   } else {
     // Return failed
     res.send({ output: null });
