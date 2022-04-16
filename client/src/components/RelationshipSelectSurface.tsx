@@ -58,7 +58,7 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
     if (!serviceA || !serviceB) return true;
     if (
       relationship === "control" &&
-      serviceA.output !== undefined &&
+      serviceA.output &&
       (!operator || !compareValue)
     )
       return true;
