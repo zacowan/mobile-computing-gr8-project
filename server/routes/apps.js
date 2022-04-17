@@ -184,6 +184,7 @@ router.patch("/start", async (req, res) => {
     app.pid = pid;
     // Set App Status to "Active"
     app.active = true;
+    app.lastActive = Date.now();
     // Save the App Back into the Apps array
     apps[index] = app;
     // Save Apps to Redis

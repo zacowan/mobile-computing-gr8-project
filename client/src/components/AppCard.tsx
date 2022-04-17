@@ -79,7 +79,7 @@ const AppCard: FC<Props> = ({ app }) => {
       {/* Buttons */}
       <div className="flex items-center space-x-3 pt-2">
         {/* Start/stop */}
-        {app.active && app.continuous === true ? (
+        {app.active && app.continuous === true && (
           <button
             onClick={() => stopApp(app.id)}
             className="text-red-600 transition-colors hover:text-red-700 disabled:text-red-700 disabled:hover:cursor-not-allowed"
@@ -87,7 +87,8 @@ const AppCard: FC<Props> = ({ app }) => {
           >
             <StopIcon className="h-12 w-12" />
           </button>
-        ) : (
+        )}
+        {app.active === false && (
           <button
             onClick={() => startApp(app.id)}
             className="text-blue-600 transition-colors hover:text-blue-700 disabled:text-blue-700 disabled:hover:cursor-not-allowed"
