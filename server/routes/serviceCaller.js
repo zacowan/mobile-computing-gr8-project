@@ -5,7 +5,7 @@ var { sendTweet } = require("../utils/atlasServiceHandler");
 var axios = require("axios");
 const {
   createLog,
-  generateServiceCallLogMessage,
+  generateServiceCallLogMessage
 } = require("../utils/logging");
 
 router.post("/", async (req, res, next) => {
