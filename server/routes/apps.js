@@ -5,7 +5,11 @@ var { v4: uuidv4 } = require("uuid");
 var fs = require("fs");
 const { generateCodeFile } = require("../utils/codegen");
 const { SLASH, getAtlasWorkingDir } = require("../utils/workingDir");
-const { createLog, generateAppErrorLogMessage, generateStartStopLogMessage } = require("../utils/logging");
+const {
+  createLog,
+  generateAppErrorLogMessage,
+  generateStartStopLogMessage,
+} = require("../utils/logging");
 var spawn = require("child_process").spawn;
 var process = require("process");
 
@@ -134,6 +138,32 @@ router.post("/logError", async (req, res) => {
   res.send();
 });
 
+router.post("/logStop", async (req, res) => {
+  // For single-use apps only
+  const { appID } = req.query;
+
+  // Find the app
+  let apps = (await getData("apps")) || [];
+  const index = apps.findIndex((app) => app.id === appID);
+  if (index !== -1) {
+    // Get App
+    var app = apps[index];
+    // Set App Status to "Active"
+    app.active = false;
+    // Save the App Back into the Apps array
+    apps[index] = app;
+    // Save Apps to Redis
+    await setData("apps", apps);
+  }
+
+  // Log the App Stopping
+  logMessage = generateStartStopLogMessage(false);
+
+  await createLog(appID, logMessage);
+
+  res.send();
+});
+
 router.patch("/start", async (req, res) => {
   const { id: appID } = req.query;
 
@@ -147,7 +177,7 @@ router.patch("/start", async (req, res) => {
     const filename = app.workingDir + SLASH + app.file;
     console.log(filename);
     // Start the app and get the process ID
-    var process = spawn('python', [filename]);
+    var process = spawn("python", [filename]);
     var pid = process.pid;
     console.log(pid);
     // Add Process ID to app
@@ -185,10 +215,10 @@ router.patch("/stop", async (req, res) => {
     // Save Apps to Redis
     await setData("apps", apps);
     // Kill the App
-    try{
+    try {
       process.kill(pid, "SIGTERM");
-    }catch(e){
-      res.status(403).send()
+    } catch (e) {
+      res.status(403).send();
     }
     // Log App Start
     await createLog(app.appID, generateStartStopLogMessage(false));
