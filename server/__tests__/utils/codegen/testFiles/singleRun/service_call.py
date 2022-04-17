@@ -10,7 +10,6 @@ try:
     requests.post(SERVICE_URL, json={'service': {'name': 'test_service_name', 'thingID': 'test_thing_id', 'spaceID': 'test_space_id', 'input': '' }})
 except Exception as e:
     requests.post(ERROR_URL, json={'message': str(e)})
-    requests.post(STOP_URL)
     exit()
 finally:
     requests.post(STOP_URL)

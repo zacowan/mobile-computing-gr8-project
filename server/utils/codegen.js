@@ -9,7 +9,7 @@ const getBasePreContent = (appID) => {
 };
 
 const getBasePostContent = () => {
-  const content = `except Exception as e:\n${TAB}requests.post(ERROR_URL, json={'message': str(e)})\n${TAB}requests.post(STOP_URL)\n${TAB}exit()\n`;
+  const content = `except Exception as e:\n${TAB}requests.post(ERROR_URL, json={'message': str(e)})\n${TAB}exit()\n`;
   return content;
 };
 

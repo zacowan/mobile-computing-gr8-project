@@ -16,5 +16,4 @@ try:
         sleep(5000/1000.0)
 except Exception as e:
     requests.post(ERROR_URL, json={'message': str(e)})
-    requests.post(STOP_URL)
     exit()
