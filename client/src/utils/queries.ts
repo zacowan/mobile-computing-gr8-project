@@ -3,7 +3,14 @@ import type { DiscoverData } from "../types/DiscoverData";
 import type { AppData } from "../types/AppData";
 import type { WorkingDirData } from "../types/WorkingDirData";
 import fetchDiscover from "./apiCalls/fetchDiscover";
-import { deleteApps, getApps, patchApps, postApps } from "./apiCalls/apps";
+import {
+  deleteApps,
+  getApps,
+  patchApps,
+  postApps,
+  startApp,
+  stopApp,
+} from "./apiCalls/apps";
 import { getStatus } from "./apiCalls/status";
 import { getWorkingDir, putWorkingDir } from "./apiCalls/workingDir";
 import type { App } from "../types/app";
@@ -50,6 +57,20 @@ export const useUpdateApp = (
     "mutationFn" | "mutationKey"
   >
 ) => useMutation<void, Error, Partial<App>, void>(APPS_KEY, patchApps, config);
+
+export const useStartApp = (
+  config?: Omit<
+    UseMutationOptions<void, Error, string, void>,
+    "mutationFn" | "mutationKey"
+  >
+) => useMutation<void, Error, string, void>(APPS_KEY, startApp, config);
+
+export const useStopApp = (
+  config?: Omit<
+    UseMutationOptions<void, Error, string, void>,
+    "mutationFn" | "mutationKey"
+  >
+) => useMutation<void, Error, string, void>(APPS_KEY, stopApp, config);
 
 export const useDeleteApp = (
   config?: Omit<
