@@ -80,7 +80,7 @@ const AppCard: FC<Props> = ({ app }) => {
         {/* Start/stop */}
         {app.active && app.continuous === true ? (
           <button
-            onClick={() => startApp(app.id)}
+            onClick={() => stopApp(app.id)}
             className="text-red-600 transition-colors hover:text-red-700 disabled:text-red-700 disabled:hover:cursor-not-allowed"
             disabled={isStarting}
           >
@@ -88,7 +88,7 @@ const AppCard: FC<Props> = ({ app }) => {
           </button>
         ) : (
           <button
-            onClick={() => stopApp(app.id)}
+            onClick={() => startApp(app.id)}
             className="text-blue-600 transition-colors hover:text-blue-700 disabled:text-blue-700 disabled:hover:cursor-not-allowed"
             disabled={isStopping}
           >
