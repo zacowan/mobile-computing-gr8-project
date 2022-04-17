@@ -14,7 +14,7 @@ const sendTweet = async (
     "Thing ID": thingID,
     "Space ID": smartSpaceID,
     "Service Name": serviceName,
-    "Service Inputs": serviceInputs,
+    "Service Inputs": "(" + (serviceInputs || "") + ")",
   };
   const tweetJSON = JSON.stringify(tweet);
   // Connect to thing

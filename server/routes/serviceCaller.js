@@ -32,7 +32,7 @@ router.post("/", async (req, res, next) => {
         thing.id,
         thing.spaceID,
         service.name,
-        service.input
+        "" + service.input
       );
       // Determine the service call output
       const serviceResult = tweetResponse["Service Result"];
@@ -49,19 +49,22 @@ router.post("/", async (req, res, next) => {
 
       if (serviceResult === "No Output" && serviceStatus === "Successful") {
         // Service with no output evaluated successfully
-        res.send({ output: true });
+        res.send({ output: 1 });
       } else if (serviceStatus === "Successful") {
         // Service with output evaluated successfully
-        res.send({ output: serviceResult });
+        var num = parseInt(serviceResult);
+        console.log(serviceResult)
+        console.log(num + " : " + typeof(num))
+        res.send({ output: num });
       } else {
         // Service evaluated unsuccessfully
-        res.send({ output: null });
+        res.send({ output: -87654321 });
       }
 
       await createLog(appID, logMessage);
     } else {
       // Return failed
-      res.send({ output: null });
+      res.status(400).send();
     }
   } catch (error) {
     res.status(400).send();

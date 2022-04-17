@@ -190,7 +190,7 @@ router.patch("/start", async (req, res) => {
     // Save Apps to Redis
     await setData("apps", apps);
     // Log App Start
-    await createLog(app.appID, generateStartStopLogMessage(true));
+    await createLog(appID, generateStartStopLogMessage(true));
     // Return success
     res.send();
   } else {
@@ -221,8 +221,8 @@ router.patch("/stop", async (req, res) => {
     } catch (e) {
       res.status(403).send();
     }
-    // Log App Start
-    await createLog(app.appID, generateStartStopLogMessage(false));
+    // Log App Stop
+    await createLog(appID, generateStartStopLogMessage(false));
     // Return success
     res.send();
   } else {
