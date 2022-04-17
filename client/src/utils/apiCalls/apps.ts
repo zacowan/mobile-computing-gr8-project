@@ -34,11 +34,11 @@ export const patchApps: MutateFunction<
 export const startApp: MutateFunction<void, Error, string, void> = async (
   id
 ) => {
-  await axios.patch(URL.concat("/start", "?appID=", id));
+  await axios.patch(URL.concat("/start", "?id=", id));
 };
 
 export const stopApp: MutateFunction<void, Error, string, void> = async (
   id
 ) => {
-  await axios.patch(URL.concat("/stop", "?appID=", id));
+  await axios.patch(URL.concat("/stop", "?id=", id));
 };
