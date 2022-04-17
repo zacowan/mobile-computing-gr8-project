@@ -36,6 +36,7 @@ const AppCard: FC<Props> = ({ app }) => {
   });
   const { mutate: stopApp, isLoading: isStopping } = useStopApp({
     onSuccess: () => queryClient.invalidateQueries(APPS_KEY),
+    onError: () => queryClient.invalidateQueries(APPS_KEY),
   });
   const [deleteModalActive, setDeleteModalActive] = useModal();
   const [logsModalActive, setLogsModalActive] = useModal();
