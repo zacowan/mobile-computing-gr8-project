@@ -120,6 +120,7 @@ router.post("/logError", async (req, res) => {
     var app = apps[index];
     // Set App Status to "Active"
     app.active = false;
+    app.lastActive = Date.now();
     // Save the App Back into the Apps array
     apps[index] = app;
     // Save Apps to Redis
@@ -150,6 +151,7 @@ router.post("/logStop", async (req, res) => {
     var app = apps[index];
     // Set App Status to "Active"
     app.active = false;
+    app.lastActive = Date.now();
     // Save the App Back into the Apps array
     apps[index] = app;
     // Save Apps to Redis
@@ -184,7 +186,6 @@ router.patch("/start", async (req, res) => {
     app.pid = pid;
     // Set App Status to "Active"
     app.active = true;
-    app.lastActive = Date.now();
     // Save the App Back into the Apps array
     apps[index] = app;
     // Save Apps to Redis
@@ -211,6 +212,7 @@ router.patch("/stop", async (req, res) => {
     var pid = app.pid;
     // Set App Status to "Stopped"
     app.active = false;
+    app.lastActive = Date.now();
     // Save the App Back into the Apps array
     apps[index] = app;
     // Save Apps to Redis
