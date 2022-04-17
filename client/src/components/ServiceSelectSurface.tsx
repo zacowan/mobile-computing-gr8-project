@@ -48,7 +48,7 @@ const ServiceSelectSurface: FC<Props> = ({
       name: service.name,
       thingID: service.thingID,
       input: input,
-      output: service.output === "int",
+      output: service.output !== "void",
       spaceID: service.spaceID,
     };
     onSelect(appService);
