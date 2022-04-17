@@ -1,36 +1,34 @@
 import React, { FC, useState } from "react";
-import { useQuery, useMutation } from "react-query";
+import { useQueryClient } from "react-query";
 
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
-import { WorkingDirData } from "../types/WorkingDirData";
-import { getWorkingDir, putWorkingDir } from "../utils/apiCalls/workingDir";
+import {
+  useWorkingDirQuery,
+  useUpdateWorkingDir,
+  WORKING_DIR_KEY,
+} from "../utils/queries";
 
 const SettingsPage: FC = () => {
+  const queryClient = useQueryClient();
   const [isEditingWorkingDir, setIsEditingWorkingDir] =
     useState<boolean>(false);
   const [workingDirInputValue, setWorkingDirInputValue] = useState<string>("");
-  const workingDirData = useQuery<WorkingDirData, Error>(
-    "workingDir",
-    getWorkingDir
-  );
-  const mutateWorkingDirData = useMutation<void, Error, string, void>(
-    "workingDir",
-    putWorkingDir,
-    {
-      onSettled: () => {
-        setIsEditingWorkingDir(false);
-      },
-      onError: () => {
-        setTimeout(handleResetError, 5000);
-      },
-    }
-  );
+  const { data: workingDirData } = useWorkingDirQuery();
+  const updateWorkingDir = useUpdateWorkingDir({
+    onSettled: () => {
+      setIsEditingWorkingDir(false);
+      queryClient.invalidateQueries(WORKING_DIR_KEY);
+    },
+    onError: () => {
+      setTimeout(handleResetError, 5000);
+    },
+  });
 
-  const handleResetError = () => mutateWorkingDirData.reset();
+  const handleResetError = () => updateWorkingDir.reset();
 
   const handleEditWorkingDir = () => {
-    setWorkingDirInputValue(workingDirData.data?.workingDir || "");
+    setWorkingDirInputValue(workingDirData?.workingDir || "");
     setIsEditingWorkingDir(true);
   };
 
@@ -45,15 +43,15 @@ const SettingsPage: FC = () => {
             value={
               isEditingWorkingDir
                 ? workingDirInputValue
-                : workingDirData.data?.workingDir
+                : workingDirData?.workingDir || ""
             }
             placeholder="Working directory"
             disabled={isEditingWorkingDir === false}
           />
           {isEditingWorkingDir ? (
             <Button
-              disabled={mutateWorkingDirData.isLoading}
-              onClick={() => mutateWorkingDirData.mutate(workingDirInputValue)}
+              disabled={updateWorkingDir.isLoading}
+              onClick={() => updateWorkingDir.mutate(workingDirInputValue)}
               primary
             >
               Save
@@ -62,10 +60,9 @@ const SettingsPage: FC = () => {
             <Button onClick={handleEditWorkingDir}>Edit</Button>
           )}
         </div>
-        {mutateWorkingDirData.isError && (
+        {updateWorkingDir.isError && (
           <span className="text-red-600">
-            Error changing app working directory:{" "}
-            {mutateWorkingDirData.error.message}
+            Error: {updateWorkingDir.error.message}
           </span>
         )}
       </div>

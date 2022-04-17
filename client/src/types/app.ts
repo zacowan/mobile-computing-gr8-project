@@ -2,7 +2,7 @@ export type App = {
   name: string;
   id: string;
   active: boolean;
-  lastActive: number; // timestamp, Date.now()
+  lastActive?: number; // timestamp, Date.now()
   continuous: boolean;
   loopDelay?: number; // time to wait between loop calls, in ms
   components: Array<AppComponent>;
@@ -24,6 +24,7 @@ export type AppComponent = {
 export type AppService = {
   name: string;
   thingID: string;
+  spaceID: string;
   input?: string;
   output?: boolean;
 };

@@ -1,4 +1,6 @@
 import React, { FC, useState } from "react";
+import { useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 import type { App } from "../types/app";
 import {
@@ -12,22 +14,20 @@ import ConfirmDialog from "./ConfirmDialog";
 import Modal, { useModal } from "../components/Modal";
 import dayjs from "dayjs";
 import LogsSurface from "./LogsSurface";
+import { APPS_KEY, useDeleteApp } from "../utils/queries";
 
 type Props = {
   app: App;
   onClickStart: () => Promise<void>;
   onClickStop: () => Promise<void>;
-  onClickEdit: () => Promise<void>;
-  onClickDelete: () => Promise<void>;
 };
 
-const AppCard: FC<Props> = ({
-  app,
-  onClickStart,
-  onClickStop,
-  onClickEdit,
-  onClickDelete,
-}) => {
+const AppCard: FC<Props> = ({ app, onClickStart, onClickStop }) => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { mutate: deleteApp, isLoading: isDeleting } = useDeleteApp({
+    onSuccess: () => queryClient.invalidateQueries(APPS_KEY),
+  });
   const [startStopDisabled, setStartStopDisabled] = useState<boolean>(false);
   const [deleteModalActive, setDeleteModalActive] = useModal();
   const [logsModalActive, setLogsModalActive] = useModal();
@@ -42,8 +42,17 @@ const AppCard: FC<Props> = ({
     }
   };
 
-  const handleDelete = async () => {
-    await onClickDelete();
+  const determineStatusText = () => {
+    if (app.active) return "Active now";
+
+    if (app.lastActive)
+      return `Last active: ${dayjs(new Date(app.lastActive)).fromNow()}`;
+
+    return "Successfully generated";
+  };
+
+  const handleDelete = () => {
+    deleteApp(app.id);
     setDeleteModalActive(false);
   };
 
@@ -56,6 +65,7 @@ const AppCard: FC<Props> = ({
           description="Are you sure you want to delete this app?"
           onConfirm={handleDelete}
           onCancel={() => setDeleteModalActive(false)}
+          confirmDisabled={isDeleting}
         />
       </Modal>
       {/* Logs Surface Modal */}
@@ -65,9 +75,7 @@ const AppCard: FC<Props> = ({
       {/* Info */}
       <h1 className="text-xl font-medium tracking-tight">{app.name}</h1>
       <h2 className="text-sm font-light text-slate-600">
-        {app.active
-          ? "Active now"
-          : `Last active: ${dayjs(new Date(app.lastActive)).fromNow()}`}
+        {determineStatusText()}
       </h2>
       {/* Buttons */}
       <div className="flex items-center space-x-3 pt-2">
@@ -99,12 +107,12 @@ const AppCard: FC<Props> = ({
         {!app.active && (
           <>
             {/* Edit */}
-            {/* <button
-              onClick={onClickEdit}
+            <button
+              onClick={() => navigate(`editor?appID=${app.id}`)}
               className="text-slate-600 hover:text-slate-700"
             >
               <PencilIcon />
-            </button> */}
+            </button>
             {/* Delete */}
             <button
               onClick={() => setDeleteModalActive(true)}

@@ -2,23 +2,23 @@ import React, { FC } from "react";
 
 import NavButton from "./NavButton";
 import { HomeIcon, TerminalIcon, CogIcon } from "../assets/icons";
-import { UseQueryResult } from "react-query";
-import { DiscoverData } from "../types/DiscoverData";
+import { useStatusQuery } from "../utils/queries";
 
-type Props = {
-  discoverQueryResult: UseQueryResult<DiscoverData, Error>;
-};
+const NavSidebar: FC = () => {
+  const statusQuery = useStatusQuery();
 
-const NavSidebar: FC<Props> = ({ discoverQueryResult }) => {
-  const determineConnectedStatus = (qr: UseQueryResult) => {
-    if (discoverQueryResult.isFetching) {
-      return "Attempting connection...";
-    }
-    if (discoverQueryResult.isFetched && discoverQueryResult.isSuccess) {
-      return "Connected";
-    } else {
-      return "Not connected";
-    }
+  const getConnectionStatusText = () => {
+    if (statusQuery.isSuccess) return "Connected";
+
+    if (statusQuery.isFetching) return "Attempting connection...";
+
+    return "Not connected";
+  };
+
+  const getErrorsText = () => {
+    if (!statusQuery.isError) return "No errors";
+
+    return statusQuery.error.message;
   };
 
   return (
@@ -49,17 +49,15 @@ const NavSidebar: FC<Props> = ({ discoverQueryResult }) => {
         </span>
         <div className="rounded bg-slate-100 px-5 py-3 text-sm font-light text-slate-600">
           <span className="flex items-center font-normal text-slate-900">
-            Things and Services
+            Server
           </span>
-          <span className="block">
-            {determineConnectedStatus(discoverQueryResult)}
-          </span>
+          <span className="block">{getConnectionStatusText()}</span>
           <span
             className={`block ${
-              discoverQueryResult.isError ? "text-red-600" : "text-green-600"
+              statusQuery.isError ? "text-red-600" : "text-green-600"
             }`}
           >
-            {discoverQueryResult.error?.message || "No errors"}
+            {getErrorsText()}
           </span>
         </div>
       </div>

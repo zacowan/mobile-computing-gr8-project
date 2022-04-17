@@ -16,5 +16,6 @@ export const putWorkingDir: MutateFunction<void, Error, string, void> = async (
   const data = {
     workingDir: newWorkingDir,
   };
-  await axios.put(URL, data);
+  const { data: res } = await axios.put(URL, data);
+  if (!res.valid) throw new Error("invalid directory");
 };

@@ -1,6 +1,7 @@
 export type Service = {
   name: string;
   thingID: string;
+  spaceID: string;
   entity: string; // entity id
   type: string;
   inputs: Array<{

@@ -1,24 +1,35 @@
-import React, { FC, useState, useContext, useEffect } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import type { App } from "../types/app";
-import DataContext from "../DataContext";
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
 import { getSearchResults } from "../utils/search";
 import AppCard from "../components/AppCard";
 import { PlusIcon } from "../assets/icons";
+import { useAppsQuery, useWorkingDirQuery } from "../utils/queries";
 
 const AppsPage: FC = () => {
-  const { apps } = useContext(DataContext);
+  const { data: appsData } = useAppsQuery();
+  const { data: workingDirData } = useWorkingDirQuery();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredApps, setFilteredApps] = useState<Array<App>>();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const filtered = getSearchResults(searchTerm, apps, ["name"]);
+    const filtered = getSearchResults(searchTerm, appsData?.apps || [], [
+      "name",
+    ]);
     setFilteredApps(filtered);
-  }, [apps, searchTerm]);
+  }, [appsData, searchTerm]);
+
+  const getNoAppsMessage = () => {
+    if (!workingDirData) return "Cannot fetch working directory.";
+    if (!appsData || appsData.apps.length === 0)
+      return `No apps in "${workingDirData?.workingDir}".`;
+
+    return `No services match the term ${searchTerm}.`;
+  };
 
   return (
     <div className="mt-20 w-full space-y-10">
@@ -37,20 +48,25 @@ const AppsPage: FC = () => {
           {/* <Button>Upload App</Button> */}
         </div>
       </div>
+      {/* No apps message */}
+      {filteredApps && filteredApps.length === 0 && (
+        <span className="block text-sm font-light text-slate-600">
+          {getNoAppsMessage()}
+        </span>
+      )}
       {/* Apps */}
-      <div className="grid max-w-4xl grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {filteredApps &&
-          filteredApps.map((app, index) => (
+      {filteredApps && filteredApps.length > 0 && (
+        <div className="grid max-w-4xl grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {filteredApps.map((app, index) => (
             <AppCard
-              onClickDelete={async () => {}}
-              onClickEdit={async () => {}}
               onClickStart={async () => {}}
               onClickStop={async () => {}}
               app={app}
               key={index}
             />
           ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
