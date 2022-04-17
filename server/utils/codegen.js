@@ -37,7 +37,7 @@ const generateControlStatement = (
   const serviceACall = generateServiceCall(serviceA, true);
   let serviceBCall = generateServiceCall(serviceB);
   if (operator && outputCompare) {
-    const condition = `${serviceACall} ${operator} '${outputCompare}'`;
+    const condition = `${serviceACall} ${operator} ${outputCompare}`;
     return generateIfStatement(condition, serviceBCall);
   } else {
     return generateIfStatement(serviceACall, serviceBCall);
