@@ -1,9 +1,10 @@
 const fs = require("fs");
 
 const TAB = "    "; // 4 spaces
+const API_URL = "http://localhost:3001";
 
 const getBasePreContent = (appID) => {
-  const content = `import requests\nfrom time import sleep\n\nSERVICE_URL = "http://localhost:3001/serviceCaller?appID=${appID}"\nERROR_URL = "http://localhost:3001/apps/logError?appID=${appID}"\n\ntry:`;
+  const content = `import requests\nfrom time import sleep\nfrom signal import signal, SIGTERM\n\nSERVICE_URL = "${API_URL}/serviceCaller?appID=${appID}"\nERROR_URL = "${API_URL}/apps/logError?appID=${appID}"\nSTOP_URL = "${API_URL}/apps/logStop?appID=${appID}"\n\nloop = True\ndef term():\n${TAB}global loop\n${TAB}loop = False\n\ntry:`;
   return content;
 };
 
@@ -36,7 +37,7 @@ const generateControlStatement = (
   const serviceACall = generateServiceCall(serviceA, true);
   let serviceBCall = generateServiceCall(serviceB);
   if (operator && outputCompare) {
-    const condition = `${serviceACall} ${operator} '${outputCompare}'`;
+    const condition = `${serviceACall} ${operator} ${outputCompare}`;
     return generateIfStatement(condition, serviceBCall);
   } else {
     return generateIfStatement(serviceACall, serviceBCall);
@@ -88,7 +89,8 @@ const generateCodeFile = (app, outputDirectory = __dirname) => {
   // Generate content
   let content = getBasePreContent(app.id) + "\n";
   if (app.continuous) {
-    content = content.concat(TAB, "while True:", "\n");
+    content = content.concat(TAB, "signal(SIGTERM, term)", "\n");
+    content = content.concat(TAB, "while loop:", "\n");
     statements.forEach((stmt) => {
       content = content.concat(TAB, TAB, stmt, "\n");
     });
@@ -99,6 +101,18 @@ const generateCodeFile = (app, outputDirectory = __dirname) => {
     });
   }
   content = content.concat(getBasePostContent());
+  if (!app.continuous) {
+    content = content.concat(
+      "finally:",
+      "\n",
+      TAB,
+      "requests.post(STOP_URL)",
+      "\n",
+      TAB,
+      "exit()",
+      "\n"
+    );
+  }
   // Generate file
   try {
     fs.mkdirSync(outputDirectory, { recursive: true });

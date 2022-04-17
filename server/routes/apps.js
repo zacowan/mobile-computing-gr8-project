@@ -5,7 +5,13 @@ var { v4: uuidv4 } = require("uuid");
 var fs = require("fs");
 const { generateCodeFile } = require("../utils/codegen");
 const { SLASH, getAtlasWorkingDir } = require("../utils/workingDir");
-const { createLog, generateAppErrorLogMessage } = require("../utils/logging");
+const {
+  createLog,
+  generateAppErrorLogMessage,
+  generateStartStopLogMessage,
+} = require("../utils/logging");
+var spawn = require("child_process").spawn;
+var process = require("process");
 
 router.post("/", async (req, res, next) => {
   // Get App Sent from Front-end in Request Body
@@ -106,11 +112,124 @@ router.post("/logError", async (req, res) => {
   const { appID } = req.query;
   const { message: errorMessage } = req.body;
 
-  const logMessage = generateAppErrorLogMessage(errorMessage);
+  // Find the app
+  let apps = (await getData("apps")) || [];
+  const index = apps.findIndex((app) => app.id === appID);
+  if (index !== -1) {
+    // Get App
+    var app = apps[index];
+    // Set App Status to "Active"
+    app.active = false;
+    app.lastActive = Date.now();
+    // Save the App Back into the Apps array
+    apps[index] = app;
+    // Save Apps to Redis
+    await setData("apps", apps);
+  }
+  // Log the Error
+  var logMessage = generateAppErrorLogMessage(errorMessage);
+
+  await createLog(appID, logMessage);
+
+  // Log the App Stopping
+  logMessage = generateStartStopLogMessage(false);
 
   await createLog(appID, logMessage);
 
   res.send();
+});
+
+router.post("/logStop", async (req, res) => {
+  // For single-use apps only
+  const { appID } = req.query;
+
+  // Find the app
+  let apps = (await getData("apps")) || [];
+  const index = apps.findIndex((app) => app.id === appID);
+  if (index !== -1) {
+    // Get App
+    var app = apps[index];
+    // Set App Status to "Active"
+    app.active = false;
+    app.lastActive = Date.now();
+    // Save the App Back into the Apps array
+    apps[index] = app;
+    // Save Apps to Redis
+    await setData("apps", apps);
+  }
+
+  // Log the App Stopping
+  logMessage = generateStartStopLogMessage(false);
+
+  await createLog(appID, logMessage);
+
+  res.send();
+});
+
+router.patch("/start", async (req, res) => {
+  const { id: appID } = req.query;
+
+  // Find the app
+  let apps = (await getData("apps")) || [];
+  const index = apps.findIndex((app) => app.id === appID);
+  if (index !== -1) {
+    // Get the app
+    let app = apps[index];
+    // Find the python file to run
+    const filename = app.workingDir + SLASH + app.file;
+    console.log(filename);
+    // Start the app and get the process ID
+    var process = spawn("python", [filename]);
+    var pid = process.pid;
+    console.log(pid);
+    // Add Process ID to app
+    app.pid = pid;
+    // Set App Status to "Active"
+    app.active = true;
+    // Save the App Back into the Apps array
+    apps[index] = app;
+    // Save Apps to Redis
+    await setData("apps", apps);
+    // Log App Start
+    await createLog(appID, generateStartStopLogMessage(true));
+    // Return success
+    res.send();
+  } else {
+    res.status(404).send();
+  }
+});
+
+router.patch("/stop", async (req, res) => {
+  const { id: appID } = req.query;
+
+  // Find the app
+  let apps = (await getData("apps")) || [];
+  const index = apps.findIndex((app) => app.id === appID);
+  if (index !== -1) {
+    // Get the app
+    let app = apps[index];
+    // Get the app Process ID
+    var pid = app.pid;
+    // Set App Status to "Stopped"
+    app.active = false;
+    app.lastActive = Date.now();
+    // Save the App Back into the Apps array
+    apps[index] = app;
+    // Save Apps to Redis
+    await setData("apps", apps);
+    // Kill the App
+    try {
+      process.kill(pid, "SIGTERM");
+    } catch (e) {
+      res.status(403).send();
+    }
+    // Log App Stop
+    await createLog(appID, generateStartStopLogMessage(false));
+    // Return success
+    res.send();
+  } else {
+    res.status(404).send();
+  }
 });
 
 /*

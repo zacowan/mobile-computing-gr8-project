@@ -39,7 +39,7 @@ const generateServiceCallLogMessage = (
   serviceInput
 ) => {
   const prefix = `[Service Call]: called service ${serviceName} with ${
-    serviceInput ? `input ${serviceInput}` : ""
+    (serviceInput !== '') ? `input ${serviceInput}` : "no inputs"
   } on thing ${thingID} in smart space ${spaceID}. `;
   if (serviceResult === "No Output" && status === "Successful") {
     return prefix + "Service evaluated successfully.";

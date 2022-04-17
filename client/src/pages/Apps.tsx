@@ -58,12 +58,7 @@ const AppsPage: FC = () => {
       {filteredApps && filteredApps.length > 0 && (
         <div className="grid max-w-4xl grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filteredApps.map((app, index) => (
-            <AppCard
-              onClickStart={async () => {}}
-              onClickStop={async () => {}}
-              app={app}
-              key={index}
-            />
+            <AppCard app={app} key={index} />
           ))}
         </div>
       )}

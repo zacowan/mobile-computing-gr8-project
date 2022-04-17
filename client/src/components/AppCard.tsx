@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -14,33 +14,32 @@ import ConfirmDialog from "./ConfirmDialog";
 import Modal, { useModal } from "../components/Modal";
 import dayjs from "dayjs";
 import LogsSurface from "./LogsSurface";
-import { APPS_KEY, useDeleteApp } from "../utils/queries";
+import {
+  APPS_KEY,
+  useDeleteApp,
+  useStartApp,
+  useStopApp,
+} from "../utils/queries";
 
 type Props = {
   app: App;
-  onClickStart: () => Promise<void>;
-  onClickStop: () => Promise<void>;
 };
 
-const AppCard: FC<Props> = ({ app, onClickStart, onClickStop }) => {
+const AppCard: FC<Props> = ({ app }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { mutate: deleteApp, isLoading: isDeleting } = useDeleteApp({
     onSuccess: () => queryClient.invalidateQueries(APPS_KEY),
   });
-  const [startStopDisabled, setStartStopDisabled] = useState<boolean>(false);
+  const { mutate: startApp, isLoading: isStarting } = useStartApp({
+    onSuccess: () => queryClient.invalidateQueries(APPS_KEY),
+  });
+  const { mutate: stopApp, isLoading: isStopping } = useStopApp({
+    onSuccess: () => queryClient.invalidateQueries(APPS_KEY),
+    onError: () => queryClient.invalidateQueries(APPS_KEY),
+  });
   const [deleteModalActive, setDeleteModalActive] = useModal();
   const [logsModalActive, setLogsModalActive] = useModal();
-
-  const handleClickStartStop = async (
-    callback: (() => Promise<void>) | undefined
-  ) => {
-    if (callback) {
-      setStartStopDisabled(true);
-      await callback();
-      setStartStopDisabled(false);
-    }
-  };
 
   const determineStatusText = () => {
     if (app.active) return "Active now";
@@ -80,19 +79,20 @@ const AppCard: FC<Props> = ({ app, onClickStart, onClickStop }) => {
       {/* Buttons */}
       <div className="flex items-center space-x-3 pt-2">
         {/* Start/stop */}
-        {app.active && app.continuous === true ? (
+        {app.active && app.continuous === true && (
           <button
-            onClick={() => handleClickStartStop(onClickStop)}
+            onClick={() => stopApp(app.id)}
             className="text-red-600 transition-colors hover:text-red-700 disabled:text-red-700 disabled:hover:cursor-not-allowed"
-            disabled={startStopDisabled}
+            disabled={isStarting}
           >
             <StopIcon className="h-12 w-12" />
           </button>
-        ) : (
+        )}
+        {app.active === false && (
           <button
-            onClick={() => handleClickStartStop(onClickStart)}
+            onClick={() => startApp(app.id)}
             className="text-blue-600 transition-colors hover:text-blue-700 disabled:text-blue-700 disabled:hover:cursor-not-allowed"
-            disabled={startStopDisabled}
+            disabled={isStopping}
           >
             <PlayIcon className="h-12 w-12" />
           </button>

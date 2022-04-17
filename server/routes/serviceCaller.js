@@ -5,7 +5,7 @@ var { sendTweet } = require("../utils/atlasServiceHandler");
 var axios = require("axios");
 const {
   createLog,
-  generateServiceCallLogMessage,
+  generateServiceCallLogMessage
 } = require("../utils/logging");
 
 router.post("/", async (req, res, next) => {
@@ -13,54 +13,61 @@ router.post("/", async (req, res, next) => {
   const { appID } = req.query;
   const { service } = req.body;
 
-  const {
-    data: { things },
-  } = await axios.get("http://localhost:3001/discover");
+  try {
+    const {
+      data: { things },
+    } = await axios.get("http://localhost:3001/discover");
 
-  const thingIndex = things.findIndex((thing) => {
-    return thing.spaceID === service.spaceID && thing.id === service.thingID;
-  });
+    const thingIndex = things.findIndex((thing) => {
+      return thing.spaceID === service.spaceID && thing.id === service.thingID;
+    });
 
-  if (thingIndex !== -1) {
-    const thing = things[thingIndex];
+    if (thingIndex !== -1) {
+      const thing = things[thingIndex];
 
-    // Send tweet, get response
-    const tweetResponse = await sendTweet(
-      thing.ip,
-      thing.port,
-      thing.id,
-      thing.spaceID,
-      service.name,
-      service.input
-    );
-    // Determine the service call output
-    const serviceResult = tweetResponse["Service Result"];
-    const serviceStatus = tweetResponse["Status"];
+      // Send tweet, get response
+      const tweetResponse = await sendTweet(
+        thing.ip,
+        thing.port,
+        thing.id,
+        thing.spaceID,
+        service.name,
+        "" + service.input
+      );
+      // Determine the service call output
+      const serviceResult = tweetResponse["Service Result"];
+      const serviceStatus = tweetResponse["Status"];
 
-    const logMessage = generateServiceCallLogMessage(
-      serviceResult,
-      serviceStatus,
-      thing.id,
-      thing.spaceID,
-      service.name,
-      service.input
-    );
+      const logMessage = generateServiceCallLogMessage(
+        serviceResult,
+        serviceStatus,
+        thing.id,
+        thing.spaceID,
+        service.name,
+        service.input
+      );
 
-    if (serviceResult === "No Output" && serviceStatus === "Successful") {
-      // Service with no output evaluated successfully
-      res.send({ output: true });
-    } else if (serviceStatus === "Successful") {
-      // Service with output evaluated successfully
-      res.send({ output: serviceResult });
+      if (serviceResult === "No Output" && serviceStatus === "Successful") {
+        // Service with no output evaluated successfully
+        res.send({ output: 1 });
+      } else if (serviceStatus === "Successful") {
+        // Service with output evaluated successfully
+        var num = parseInt(serviceResult);
+        console.log(serviceResult)
+        console.log(num + " : " + typeof(num))
+        res.send({ output: num });
+      } else {
+        // Service evaluated unsuccessfully
+        res.send({ output: -87654321 });
+      }
+
+      await createLog(appID, logMessage);
     } else {
-      // Service evaluated unsuccessfully
-      res.send({ output: null });
+      // Return failed
+      res.status(400).send();
     }
-
-    await createLog(appID, logMessage);
-  } else {
-    // Return failed
-    res.send({ output: null });
+  } catch (error) {
+    res.status(400).send();
   }
 });
 
