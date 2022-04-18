@@ -2,7 +2,7 @@
         <Atlas_Thing>
                 <Descriptive_Metadata>
                         <Thing_ATID>zach_led_thing</Thing_ATID>
-                        <Thing_Name>LED Thing</Thing_Name>
+                        <Thing_Name>Zach LED Thing</Thing_Name>
                         <Thing_Owner></Thing_Owner>
                         <Thing_Vendor></Thing_Vendor>
                         <Thing_Model></Thing_Model>
@@ -85,7 +85,7 @@
         <Atlas_Entities>
                 <Entity_1>
                         <Descriptive_Metadata>
-                                <ID>led</ID>
+                                <ID>led_01</ID>
                                 <Name>LED</Name>
                                 <Owner></Owner>
                                 <Vendor></Vendor>
@@ -95,7 +95,7 @@
                         </Descriptive_Metadata>
                         <Services>
                                 <Service_1>
-                                        <Name>trigger_led</Name>
+                                        <Name>set_led</Name>
                                         <AppCategory>Lighting</AppCategory>
                                         <Type>Action</Type>
                                         <Keywords>LED,on,off</Keywords>

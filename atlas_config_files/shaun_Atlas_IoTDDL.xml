@@ -1,102 +1,102 @@
 <Atlas_IoTDDL>
-        <Atlas_Thing>
-                <Descriptive_Metadata>
-                        <Thing_ATID>shaun_led_thing</Thing_ATID>
-                        <Thing_Name>LED Thing</Thing_Name>
-                        <Thing_Owner></Thing_Owner>
-                        <Thing_Vendor></Thing_Vendor>
-                        <Thing_Model></Thing_Model>
-                        <Thing_ReleaseDate>4/2022</Thing_ReleaseDate>
-                        <Thing_Type>Thing of Things</Thing_Type>
-                        <Thing_OperatingSystem>Raspbian</Thing_OperatingSystem>
-                        <Thing_ShortDescription>A simple thing that contains an LED that can be turned on/off.</Thing_ShortDescription>
-                        <LongDescription></LongDescription>
-                        <Thing_SSID>StrawberrySmartSpace</Thing_SSID>
-                        <Space_Coordinates></Space_Coordinates>
-                        <Space_Name></Space_Name>
-                        <Space_Description></Space_Description>
-                        <Space_Constraints>
-                                <Temperature>
-                                        <Lower_Bound></Lower_Bound>
-                                        <Upper_Bound></Upper_Bound>
-                                </Temperature>
-                                <Humidity>
-                                        <Lower_Bound></Lower_Bound>
-                                        <Upper_Bound></Upper_Bound>
-                                </Humidity>
-                                <Voltage>
-                                        <Lower_Bound></Lower_Bound>
-                                        <Upper_Bound></Upper_Bound>
-                                </Voltage>
-                                <Radio_Interference_Radius></Radio_Interference_Radius>
-                                <Safe_Temperature_Radius></Safe_Temperature_Radius>
-                        </Space_Constraints>
-                </Descriptive_Metadata>
-                <Administrative_Metadata>
-                        <Network_Manager>
-                                <Module></Module>
-                                <Type></Type>
-                                <Network_Name>Unifi-SF</Network_Name>
-                                <Network_Passcode></Network_Passcode>
-                                <MulticastGroup>
-                                        <IP>232.1.1.1</IP>
-                                        <Port>1235</Port>
-                                </MulticastGroup>
-                                <Communication_Protocol>Sockets</Communication_Protocol>
-                                <InterOperableCommunication>
-                                        <Broker>
-                                                <Vendor>HiveMQ</Vendor>
-                                                <Dashboard>http://www.mqtt-dashboard.com/</Dashboard>
-                                                <IP>broker.hivemq.com</IP>
-                                                <Port>1883</Port>
-                                        </Broker>
-                                        <Topic>
-                                                <Root>/Atlas</Root>
-                                                <Network_MQTTClient>/Network/MQTT_Client</Network_MQTTClient>
-                                                <Network_PrivateBroker>/Network/Private_Broker</Network_PrivateBroker>
-                                                <Multicast_ThingIdentity>/Multicast/Tweet_ThingIdentity</Multicast_ThingIdentity>
-                                                <Multicast_EntityIdentity>/Multicast/Tweet_EntityIdentity</Multicast_EntityIdentity>
-                                                <Multicast_API>/Multicast/API</Multicast_API>
-                                                <Unicast>/Unicast/Interaction</Unicast>
-                                        </Topic>
-                                </InterOperableCommunication>
-                                <OMA_DM>
-                                        <AccessName>Eclipse Leshan</AccessName>
-                                        <IP>coap://leshan.eclipseprojects.io</IP>
-                                        <Port>5683</Port>
-                                </OMA_DM>
-                        </Network_Manager>
-                        <Memory_Manager>
-                                <Store_Format></Store_Format>
-                                <MemoryUnit_Application></MemoryUnit_Application>
-                                <MemoryUnit_Knowledge></MemoryUnit_Knowledge>
-                        </Memory_Manager>
-                </Administrative_Metadata>
-                <Thing_Attachment>
+	<Atlas_Thing>
+		<Descriptive_Metadata>
+			<Thing_ATID>shaun_light_thing</Thing_ATID>
+			<Thing_Name>Shaun's Light Thing</Thing_Name>
+			<Thing_Owner>StrawberryPi</Thing_Owner>
+			<Thing_Vendor>StrawberryPi</Thing_Vendor>
+			<Thing_Model>Gen_1</Thing_Model>
+			<Thing_ReleaseDate>4/2022</Thing_ReleaseDate>
+			<Thing_Type>Thing_of_Things</Thing_Type>
+			<Thing_OperatingSystem>Raspbian</Thing_OperatingSystem>
+			<Thing_ShortDescription>A thing containing a variety of LEDs and a light sensor.</Thing_ShortDescription>
+			<LongDescription></LongDescription>
+			<Thing_SSID>StrawberrySmartSpace</Thing_SSID>
+			<Space_Coordinates></Space_Coordinates>
+			<Space_Name></Space_Name>
+			<Space_Description></Space_Description>
+			<Space_Constraints>
+				<Temperature>
+					<Lower_Bound></Lower_Bound>
+					<Upper_Bound></Upper_Bound>
+				</Temperature>
+				<Humidity>
+					<Lower_Bound></Lower_Bound>
+					<Upper_Bound></Upper_Bound>
+				</Humidity>
+				<Voltage>
+					<Lower_Bound></Lower_Bound>
+					<Upper_Bound></Upper_Bound>
+				</Voltage>
+				<Radio_Interference_Radius></Radio_Interference_Radius>
+				<Safe_Temperature_Radius></Safe_Temperature_Radius>
+			</Space_Constraints>
+		</Descriptive_Metadata>
+		<Administrative_Metadata>
+			<Network_Manager>
+				<Module></Module>
+				<Type></Type>
+				<Network_Name>MySpaceNetwork</Network_Name>
+				<Network_Passcode>MySpaceNetwork</Network_Passcode>
+				<MulticastGroup>
+					<IP>232.1.1.1</IP>
+					<Port>1235</Port>
+				</MulticastGroup>
+				<Communication_Protocol></Communication_Protocol>
+				<InterOperableCommunication>
+					<Broker>
+						<Vendor>HiveMQ</Vendor>
+						<Dashboard>http://www.mqtt-dashboard.com/</Dashboard>
+						<IP>broker.hivemq.com</IP>
+						<Port>1883</Port>
+					</Broker>
+					<Topic>
+						<Root>/Atlas</Root>
+						<Network_MQTTClient>/Network/MQTT_Client</Network_MQTTClient>
+						<Network_PrivateBroker>/Network/Private_Broker</Network_PrivateBroker>
+						<Multicast_ThingIdentity>/Multicast/Tweet_ThingIdentity</Multicast_ThingIdentity>
+						<Multicast_EntityIdentity>/Multicast/Tweet_EntityIdentity</Multicast_EntityIdentity>
+						<Multicast_API>/Multicast/API</Multicast_API>
+						<Unicast>/Unicast/Interaction</Unicast>
+					</Topic>
+				</InterOperableCommunication>
+				<OMA_DM>
+					<AccessName>Eclipse Leshan</AccessName>
+					<IP>coap://leshan.eclipseprojects.io</IP>
+					<Port>5683</Port>
+				</OMA_DM>
+			</Network_Manager>
+			<Memory_Manager>
+				<Store_Format></Store_Format>
+				<MemoryUnit_Application></MemoryUnit_Application>
+				<MemoryUnit_Knowledge></MemoryUnit_Knowledge>
+			</Memory_Manager>
+		</Administrative_Metadata>
+		<Thing_Attachment>
 
-                </Thing_Attachment>
-                <Structural_Metadata>
-                        <Number_Hardware>1</Number_Hardware>
-                        <Number_Software>0</Number_Software>
-                        <Number_Hybrid>0</Number_Hybrid>
-                        <Number_Entities>1</Number_Entities>
-                </Structural_Metadata>
-        </Atlas_Thing>
-        <Atlas_Entities>
-                <Entity_1>
-                        <Descriptive_Metadata>
-                                <ID>led</ID>
-                                <Name>LED</Name>
-                                <Owner></Owner>
-                                <Vendor></Vendor>
-                                <Category>Hardware</Category>
-                                <Type>Connected</Type>
-                                <Description>An LED that can be turned on/off</Description>
-                        </Descriptive_Metadata>
-                        <Services>
-                                <Service_1>
-                                        <Name>trigger_led</Name>
-                                        <AppCategory>Lighting</AppCategory>
+		</Thing_Attachment>
+		<Structural_Metadata>
+			<Number_Hardware>0</Number_Hardware>
+			<Number_Software>0</Number_Software>
+			<Number_Hybrid>0</Number_Hybrid>
+			<Number_Entities>3</Number_Entities>
+		</Structural_Metadata>
+	</Atlas_Thing>
+	<Atlas_Entities>
+		<Entity_1>
+			<Descriptive_Metadata>
+				<ID>led_01</ID>
+				<Name>LED</Name>
+				<Owner></Owner>
+				<Vendor></Vendor>
+				<Category></Category>
+				<Type></Type>
+				<Description></Description>
+			</Descriptive_Metadata>
+			<Services>
+				<Service_1>
+					<Name>set_led</Name>
+					<AppCategory>Lighting</AppCategory>
                                         <Type>Action</Type>
                                         <Keywords>LED,on,off</Keywords>
                                         <Description>Turn the LED on/off</Description>
@@ -117,28 +117,221 @@
                                         </Temporal_Constraints>
                                         <OutputDescription></OutputDescription>
                                         <OutputType>void</OutputType>
-                                        <Service_Formula><![CDATA[
+					<Service_Formula><![CDATA[
 // ~ Service body C/C++ code block ~
 // You can use the inputs you defined above by name
 // Any return values should match the specified output type
-const int PIN_LED = 25;
+const int PIN_LED = 23;
 
 wiringPiSetupGpio();
 
 digitalWrite(PIN_LED, new_value);
 ]]></Service_Formula>
-                                        <Service_NumberInputs>1</Service_NumberInputs>
-                                        <Service_InputTypes>int</Service_InputTypes>
-                                        <Service_InputDescriptions>new_value</Service_InputDescriptions>
-                                </Service_1>
-                                <Number_Services>1</Number_Services>
-                        </Services>
-                        <UnboundedService>
-                                <Number_UnboundedServices>0</Number_UnboundedServices>
-                        </UnboundedService>
-                        <Relationships>
-                                <Number_Relationships>0</Number_Relationships>
-                        </Relationships>
-                </Entity_1>
-        </Atlas_Entities>
+					<Service_NumberInputs>1</Service_NumberInputs>
+					<Service_InputTypes>int</Service_InputTypes>
+					<Service_InputDescriptions>new_value</Service_InputDescriptions>
+				</Service_1>
+				<Number_Services>1</Number_Services>
+			</Services>
+			<UnboundedService>
+				<Number_UnboundedServices>0</Number_UnboundedServices>
+			</UnboundedService>
+			<Relationships>
+				<Number_Relationships>0</Number_Relationships>
+			</Relationships>
+		</Entity_1>
+		<Entity_2>
+			<Descriptive_Metadata>
+				<ID>photoresistor_01</ID>
+				<Name>Light Sensor</Name>
+				<Owner></Owner>
+				<Vendor></Vendor>
+				<Category></Category>
+				<Type></Type>
+				<Description></Description>
+			</Descriptive_Metadata>
+			<Services>
+				<Service_1>
+					<Name>get_light_level</Name>
+					<AppCategory>Ambiance</AppCategory>
+					<Type>Report</Type>
+					<Keywords></Keywords>
+					<Description>Returns the current light level. Low values indicate high light, and high levels indicate low light.</Description>
+					<Contextual_Constraints>
+						<Time_Window>0seconds</Time_Window>
+						<Usage_Mode></Usage_Mode>
+						<Concurrent></Concurrent>
+					</Contextual_Constraints>
+					<Temporal_Constraints>
+						<Working>
+							<StartTime>12am</StartTime>
+							<EndTime>12am</EndTime>
+						</Working>
+						<Callable>
+							<StartTime>12am</StartTime>
+							<EndTime>12am</EndTime>
+						</Callable>
+					</Temporal_Constraints>
+					<OutputDescription>light_level</OutputDescription>
+					<OutputType>int</OutputType>
+					<Service_Formula><![CDATA[
+// ~ Service body C/C++ code block ~
+// You can use the inputs you defined above by name
+// Any return values should match the specified output type
+
+int cmd = 0x84;
+wiringPiSetup();
+int _fd = wiringPiI2CSetup(0x4b);
+int chn = 0;
+wiringPiI2CWrite(_fd, cmd|(((chn<<2 | chn>>1)&0x07)<<4));
+light_level = wiringPiI2CRead(_fd);
+]]></Service_Formula>
+					<Service_NumberInputs>0</Service_NumberInputs>
+					<Service_InputTypes></Service_InputTypes>
+					<Service_InputDescriptions></Service_InputDescriptions>
+				</Service_1>
+				<Number_Services>1</Number_Services>
+			</Services>
+			<UnboundedService>
+				<Number_UnboundedServices>0</Number_UnboundedServices>
+			</UnboundedService>
+			<Relationships>
+				<Number_Relationships>0</Number_Relationships>
+			</Relationships>
+		</Entity_2>
+		<Entity_3>
+			<Descriptive_Metadata>
+				<ID>rgb_led_01</ID>
+				<Name>RGB LED</Name>
+				<Owner></Owner>
+				<Vendor></Vendor>
+				<Category></Category>
+				<Type></Type>
+				<Description></Description>
+			</Descriptive_Metadata>
+			<Services>
+				<Service_1>
+					<Name>get_rgb_b_or_r</Name>
+					<AppCategory>Lighting</AppCategory>
+					<Type>Report</Type>
+					<Keywords></Keywords>
+					<Description>Returns 0 if the RGB LED is blue, and 1 if it is red.</Description>
+					<Contextual_Constraints>
+						<Time_Window>0seconds</Time_Window>
+						<Usage_Mode></Usage_Mode>
+						<Concurrent></Concurrent>
+					</Contextual_Constraints>
+					<Temporal_Constraints>
+						<Working>
+							<StartTime>12am</StartTime>
+							<EndTime>12am</EndTime>
+						</Working>
+						<Callable>
+							<StartTime>12am</StartTime>
+							<EndTime>12am</EndTime>
+						</Callable>
+					</Temporal_Constraints>
+					<OutputDescription>color</OutputDescription>
+					<OutputType>int</OutputType>
+					<Service_Formula><![CDATA[
+// ~ Service body C/C++ code block ~
+// You can use the inputs you defined above by name
+// Any return values should match the specified output type
+
+int PIN_R = 5;
+int PIN_G = 6;
+int PIN_B = 13;
+
+int RGB_ON = LOW;
+int RGB_OFF = HIGH;
+
+wiringPiSetupGpio();
+
+// Read which LED color is "ON"
+if (digitalRead(PIN_B) == RGB_ON)
+{
+    // Blue is on, return 0
+    color = 0;
+}
+else {
+    // Red is on, return 1
+    color = 1;
+}
+]]></Service_Formula>
+					<Service_NumberInputs>0</Service_NumberInputs>
+					<Service_InputTypes></Service_InputTypes>
+					<Service_InputDescriptions></Service_InputDescriptions>
+				</Service_1>
+                                <Service_2>
+					<Name>set_rgb_led</Name>
+					<AppCategory>Lighting</AppCategory>
+					<Type>Action</Type>
+					<Keywords></Keywords>
+					<Description>Sets the color of the RGB LED. If passed 0, the color will be blue. If passed 1, the color will be red.</Description>
+					<Contextual_Constraints>
+						<Time_Window>0seconds</Time_Window>
+						<Usage_Mode></Usage_Mode>
+						<Concurrent></Concurrent>
+					</Contextual_Constraints>
+					<Temporal_Constraints>
+						<Working>
+							<StartTime>12am</StartTime>
+							<EndTime>12am</EndTime>
+						</Working>
+						<Callable>
+							<StartTime>12am</StartTime>
+							<EndTime>12am</EndTime>
+						</Callable>
+					</Temporal_Constraints>
+					<OutputDescription></OutputDescription>
+					<OutputType>void</OutputType>
+					<Service_Formula><![CDATA[
+// ~ Service body C/C++ code block ~
+// You can use the inputs you defined above by name
+// Any return values should match the specified output type
+
+int PIN_R = 5;
+int PIN_G = 6;
+int PIN_B = 13;
+
+int RGB_ON = LOW;
+int RGB_OFF = HIGH;
+
+wiringPiSetupGpio();
+
+switch (new_color)
+{
+case 0:
+    // turn the RGB LED to blue
+    digitalWrite(PIN_R, RGB_OFF);
+    digitalWrite(PIN_G, RGB_OFF);
+    digitalWrite(PIN_B, RGB_ON);
+    break;
+
+case 1:
+    // turn the RGB LED to red
+    digitalWrite(PIN_R, RGB_ON);
+    digitalWrite(PIN_G, RGB_OFF);
+    digitalWrite(PIN_B, RGB_OFF);
+    break;
+
+default:
+    // Do nothing
+    break;
+}
+]]></Service_Formula>
+					<Service_NumberInputs>1</Service_NumberInputs>
+					<Service_InputTypes>int</Service_InputTypes>
+					<Service_InputDescriptions>new_color</Service_InputDescriptions>
+				</Service_2>
+				<Number_Services>2</Number_Services>
+			</Services>
+			<UnboundedService>
+				<Number_UnboundedServices>0</Number_UnboundedServices>
+			</UnboundedService>
+			<Relationships>
+				<Number_Relationships>0</Number_Relationships>
+			</Relationships>
+		</Entity_3>
+	</Atlas_Entities>
 </Atlas_IoTDDL>
