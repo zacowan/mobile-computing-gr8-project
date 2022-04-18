@@ -74,6 +74,7 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
           onClose={() => setServAModalActive(false)}
           onSelect={(as) => setServiceA(as)}
           serviceRequirement={relationship === "drive" ? "output" : undefined}
+          title="Select service A"
         />
       </Modal>
       {/* Service B modal */}
@@ -82,6 +83,7 @@ const RelationshipSelectSurface: FC<Props> = ({ onClose, onAdd }) => {
           onClose={() => setServBModalActive(false)}
           onSelect={(as) => setServiceB(as)}
           serviceRequirement={relationship === "drive" ? "input" : undefined}
+          title="Select service B"
         />
       </Modal>
       <h1 className="text-lg font-medium">Add relationship</h1>

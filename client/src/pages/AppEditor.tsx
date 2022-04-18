@@ -112,9 +112,7 @@ const AppEditorPage: FC = () => {
           onClose={() => setServModalActive(false)}
         />
       </Modal>
-      <h1 className="text-6xl">
-        {appIDToEdit === undefined ? "New App" : "Edit App"}
-      </h1>
+      <h1 className="text-6xl">{appIDToEdit ? "Edit App" : "New App"}</h1>
       <form
         className="space-y-10"
         onSubmit={handleSubmit}
