@@ -124,6 +124,7 @@
 const int PIN_LED = 25;
 
 wiringPiSetupGpio();
+pinMode(PIN_LED, OUTPUT);
 
 digitalWrite(PIN_LED, new_value);
 ]]></Service_Formula>

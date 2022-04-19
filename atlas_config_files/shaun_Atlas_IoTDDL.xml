@@ -124,6 +124,7 @@
 const int PIN_LED = 23;
 
 wiringPiSetupGpio();
+pinMode(PIN_LED, OUTPUT);
 
 digitalWrite(PIN_LED, new_value);
 ]]></Service_Formula>
@@ -246,6 +247,9 @@ int RGB_ON = LOW;
 int RGB_OFF = HIGH;
 
 wiringPiSetupGpio();
+pinMode(PIN_R, OUTPUT);
+pinMode(PIN_G, OUTPUT);
+pinMode(PIN_B, OUTPUT);
 
 // Read which LED color is "ON"
 if (digitalRead(PIN_B) == RGB_ON)
@@ -298,6 +302,9 @@ int RGB_ON = LOW;
 int RGB_OFF = HIGH;
 
 wiringPiSetupGpio();
+pinMode(PIN_R, OUTPUT);
+pinMode(PIN_G, OUTPUT);
+pinMode(PIN_B, OUTPUT);
 
 switch (new_color)
 {
